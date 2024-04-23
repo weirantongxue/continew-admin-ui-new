@@ -30,7 +30,7 @@
           </a-input>
           <a-button @click="reset">重置</a-button>
         </template>
-        <!-- <template #custom-right>
+        <template #custom-right>
           <a-tooltip content="导出">
             <a-button v-permission="['front:chatMessage:export']" @click="onExport">
               <template #icon>
@@ -38,7 +38,10 @@
               </template>
             </a-button>
           </a-tooltip>
-        </template> -->
+        </template>
+        <template #name="{ record }">
+          <a-link @click="onDetail(record)">{{ record.name }}</a-link>
+        </template>
         <template #action="{ record }">
           <a-space>
             <a-link
@@ -54,7 +57,6 @@
       </GiTable>
     </a-card>
 
-    <ChatMessageAddModal ref="ChatMessageAddModalRef" @save-success="search" />
     <ChatMessageDetailDrawer ref="ChatMessageDetailDrawerRef" />
   </div>
 </template>
@@ -63,7 +65,7 @@
 import {
   listChatMessage,
   deleteChatMessage,
-  // exportChatMessage,
+  exportChatMessage,
   type ChatMessageResp,
   type ChatMessageQuery
 } from '@/apis/ai/chatMessage'
@@ -91,9 +93,7 @@ const columns: TableInstanceColumns[] = [
   { title: '总请求耗时', dataIndex: 'responseTime' },
   { title: '聊天耗时', dataIndex: 'chatResponseTime' },
   { title: '创建时间', dataIndex: 'createTime' },
-  { title: '创建人', dataIndex: 'createUser' },
-  { title: '更新时间', dataIndex: 'updateTime' },
-  { title: '修改人', dataIndex: 'updateUser' },
+  { title: '创建人', dataIndex: 'createUserString' },
   {
     title: '操作',
     slotName: 'action',
@@ -140,9 +140,9 @@ const onDelete = (item: ChatMessageResp) => {
 }
 
 // 导出
-// const onExport = () => {
-//   useDownload(() => exportChatMessage(queryForm))
-// }
+const onExport = () => {
+  useDownload(() => exportChatMessage(queryForm))
+}
 
 const ChatMessageDetailDrawerRef = ref<InstanceType<typeof ChatMessageDetailDrawer>>()
 // 详情

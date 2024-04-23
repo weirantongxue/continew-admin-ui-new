@@ -19,8 +19,6 @@ export interface ChatMessageResp {
   chatResponseTime: string
   createTime: string
   createUser: string
-  updateTime: string
-  updateUser: string
   createUserString: string
   updateUserString: string
 }
@@ -78,4 +76,9 @@ export function updateChatMessage(data: any, id: string) {
 /** @desc 删除对话消息 */
 export function deleteChatMessage(id: string) {
   return http.del(`${BASE_URL}/${id}`)
+}
+
+/** @desc 导出对话消息 */
+export function exportChatMessage(query: ChatMessageQuery) {
+  return http.download<any>(`${BASE_URL}/export`, query)
 }

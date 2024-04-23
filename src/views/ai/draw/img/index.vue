@@ -1,6 +1,6 @@
 <template>
   <div class="gi_page">
-    <a-card title="绘图任务管理" class="general-card">
+    <a-card title="绘图素材管理" class="general-card">
       <GiTable
         ref="tableRef"
         row-key="id"
@@ -20,7 +20,7 @@
         </template>
         <template #custom-right>
           <a-tooltip content="导出">
-            <a-button v-permission="['front:drawTask:export']" @click="onExport">
+            <a-button v-permission="['front:drawImg:export']" @click="onExport">
               <template #icon>
                 <icon-download />
               </template>
@@ -33,7 +33,7 @@
         <template #action="{ record }">
           <a-space>
             <a-link
-              v-permission="['front:drawTask:delete']"
+              v-permission="['front:drawImg:delete']"
               status="danger"
               :disabled="record.disabled"
               @click="onDelete(record)"
@@ -45,28 +45,24 @@
       </GiTable>
     </a-card>
 
-    <DrawTaskAddModal ref="DrawTaskAddModalRef" @save-success="search" />
-    <DrawTaskDetailDrawer ref="DrawTaskDetailDrawerRef" />
+    <DrawImgDetailDrawer ref="DrawImgDetailDrawerRef" />
   </div>
 </template>
 
 <script setup lang="ts">
-import { listDrawTask, deleteDrawTask, exportDrawTask, type DrawTaskResp, type DrawTaskQuery } from '@/apis/ai/drawTask'
-import DrawTaskDetailDrawer from './DrawTaskDetailDrawer.vue'
+import { listDrawImg, deleteDrawImg, exportDrawImg, type DrawImgResp, type DrawImgQuery } from '@/apis/ai/drawImg'
+import DrawImgDetailDrawer from './DrawImgDetailDrawer.vue'
 import type { TableInstanceColumns } from '@/components/GiTable/type'
 import { useTable, useDownload } from '@/hooks'
 import { isMobile } from '@/utils'
 import has from '@/utils/has'
 
-defineOptions({ name: 'AiDrawTask' })
+defineOptions({ name: 'DrawImg' })
 
 const columns: TableInstanceColumns[] = [
   { title: '主键', dataIndex: 'id' },
   { title: '任务id', dataIndex: 'taskId' },
-  { title: '问题', dataIndex: 'prompt' },
-  { title: '拼接图', dataIndex: 'mosaicImg' },
-  { title: '传递id', dataIndex: 'nonce' },
-  { title: '任务状态success', dataIndex: 'state' },
+  { title: '图片地址', dataIndex: 'imageUrl' },
   { title: '创建时间', dataIndex: 'createTime' },
   { title: '创建人', dataIndex: 'createUserString' },
   {
@@ -75,11 +71,11 @@ const columns: TableInstanceColumns[] = [
     width: 130,
     align: 'center',
     fixed: !isMobile() ? 'right' : undefined,
-    show: has.hasPermOr(['front:drawTask:update', 'front:drawTask:delete'])
+    show: has.hasPermOr(['front:drawImg:update', 'front:drawImg:delete'])
   }
 ]
 
-const queryForm: DrawTaskQuery = reactive({
+const queryForm: DrawImgQuery = reactive({
   taskId: undefined,
   sort: ['createTime,desc']
 })
@@ -90,7 +86,7 @@ const {
   pagination,
   search,
   handleDelete
-} = useTable((p) => listDrawTask({ ...queryForm, page: p.page, size: p.size }), { immediate: true })
+} = useTable((p) => listDrawImg({ ...queryForm, page: p.page, size: p.size }), { immediate: true })
 
 // 重置
 const reset = () => {
@@ -99,8 +95,8 @@ const reset = () => {
 }
 
 // 删除
-const onDelete = (item: DrawTaskResp) => {
-  return handleDelete(() => deleteDrawTask(item.id), {
+const onDelete = (item: DrawImgResp) => {
+  return handleDelete(() => deleteDrawImg(item.id), {
     content: `是否确定删除该条数据？`,
     showModal: true
   })
@@ -108,13 +104,15 @@ const onDelete = (item: DrawTaskResp) => {
 
 // 导出
 const onExport = () => {
-  useDownload(() => exportDrawTask(queryForm))
+  useDownload(() => exportDrawImg(queryForm))
 }
 
-const DrawTaskDetailDrawerRef = ref<InstanceType<typeof DrawTaskDetailDrawer>>()
+const DrawImgAddModalRef = ref<InstanceType<typeof DrawImgAddModal>>()
+
+const DrawImgDetailDrawerRef = ref<InstanceType<typeof DrawImgDetailDrawer>>()
 // 详情
-const onDetail = (item: DrawTaskResp) => {
-  DrawTaskDetailDrawerRef.value?.onDetail(item.id)
+const onDetail = (item: DrawImgResp) => {
+  DrawImgDetailDrawerRef.value?.onDetail(item.id)
 }
 </script>
 

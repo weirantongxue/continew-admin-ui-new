@@ -8,11 +8,8 @@ export interface ItemResp {
   modelScriptId: string
   lastMessage: string
   number: string
-  isDeleted: string
   createTime: string
   createUser: string
-  updateTime: string
-  updateUser: string
   createUserString: string
   updateUserString: string
 }
@@ -33,6 +30,8 @@ export interface ItemDetailResp {
 export interface ItemQuery extends PageQuery {
   name: string
   modelScriptId: string
+  createTime: string
+  createUser: string
 }
 
 /** @desc 查询AI会话列表 */
@@ -60,7 +59,7 @@ export function deleteItem(id: string) {
   return http.del(`${BASE_URL}/${id}`)
 }
 
-/** @desc 导出会话 */
+/** @desc 导出AI会话 */
 export function exportItem(query: ItemQuery) {
-  return http.download<any>(`${BASE_URL}/export/operation`, query)
+  return http.download<any>(`${BASE_URL}/export`, query)
 }

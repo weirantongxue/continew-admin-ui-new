@@ -19,6 +19,12 @@
           <a-input v-model="queryForm.modelScriptId" placeholder="请输入脚本id" allow-clear @change="search">
             <template #prefix><icon-search /></template>
           </a-input>
+          <a-input v-model="queryForm.createTime" placeholder="请输入创建时间" allow-clear @change="search">
+            <template #prefix><icon-search /></template>
+          </a-input>
+          <a-input v-model="queryForm.createUser" placeholder="请输入创建人" allow-clear @change="search">
+            <template #prefix><icon-search /></template>
+          </a-input>
           <a-button @click="reset">重置</a-button>
         </template>
         <template #custom-right>
@@ -29,6 +35,9 @@
               </template>
             </a-button>
           </a-tooltip>
+        </template>
+        <template #name="{ record }">
+          <a-link @click="onDetail(record)">{{ record.name }}</a-link>
         </template>
         <template #action="{ record }">
           <a-space>
@@ -45,7 +54,6 @@
       </GiTable>
     </a-card>
 
-    <ItemAddModal ref="ItemAddModalRef" @save-success="search" />
     <ItemDetailDrawer ref="ItemDetailDrawerRef" />
   </div>
 </template>
@@ -81,6 +89,8 @@ const columns: TableInstanceColumns[] = [
 const queryForm: ItemQuery = reactive({
   name: undefined,
   modelScriptId: undefined,
+  createTime: undefined,
+  createUser: undefined,
   sort: ['createTime,desc']
 })
 
@@ -96,6 +106,8 @@ const {
 const reset = () => {
   queryForm.name = undefined
   queryForm.modelScriptId = undefined
+  queryForm.createTime = undefined
+  queryForm.createUser = undefined
   search()
 }
 
