@@ -1,8 +1,8 @@
 <template>
   <section class="system-logo" :class="{ collapsed: props.collapsed }" @click="toHome">
-    <img v-if="webLogo" class="logo" :src="webLogo" alt="logo" />
+    <img v-if="logo" class="logo" :src="logo" alt="logo" />
     <img v-else class="logo" src="/logo.svg" alt="logo" />
-    <span class="system-name">{{ webTitle }}</span>
+    <span class="system-name">{{ title }}</span>
   </section>
 </template>
 
@@ -10,21 +10,17 @@
 import { useAppStore } from '@/stores'
 
 const appStore = useAppStore()
-appStore.initWebConfig()
-
-const webTitle = computed(() => appStore.getTitle())
-const webLogo = computed(() => appStore.getLogo())
+const title = computed(() => appStore.getTitle())
+const logo = computed(() => appStore.getLogo())
 
 interface Props {
   collapsed?: boolean
 }
-
 const props = withDefaults(defineProps<Props>(), {
   collapsed: false
 })
 
 const router = useRouter()
-
 // 跳转首页
 const toHome = () => {
   router.push('/')
@@ -49,10 +45,6 @@ const toHome = () => {
     display: flex;
     justify-content: center;
     align-items: center;
-    // .logo {
-    //   width: 24px;
-    //   height: 24px;
-    // }
     .system-name {
       display: none;
     }
@@ -66,7 +58,7 @@ const toHome = () => {
     flex-shrink: 0;
   }
   .system-name {
-    padding-left: 10px;
+    padding-left: 8px;
     white-space: nowrap;
     transition: color 0.3s;
     &:hover {

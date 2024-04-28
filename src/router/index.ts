@@ -40,15 +40,14 @@ export const constantRoutes: RouteRecordRaw[] = [
     children: [
       {
         path: '/home',
-        component: () => import('@/views/home/index.vue'),
         name: 'Home',
+        component: () => import('@/views/home/index.vue'),
         meta: { title: '首页', icon: 'dashboard', affix: true, hidden: false }
       }
     ]
   },
   {
     path: '/social/callback',
-    name: 'SocialCallback',
     component: () => import('@/views/login/social/index.vue'),
     meta: { hidden: true }
   },
@@ -56,35 +55,19 @@ export const constantRoutes: RouteRecordRaw[] = [
     path: '/setting',
     name: 'Setting',
     component: Layout,
-    redirect: '/setting/profile',
     meta: { hidden: true },
     children: [
       {
-        path: '/setting',
-        name: 'Setting',
-        component: () => import('@/views/setting/index.vue'),
-        redirect: '',
-        meta: { hidden: true },
-        children: [
-          {
-            path: '/setting/profile',
-            component: () => import('@/views/setting/profile/index.vue'),
-            name: 'Profile',
-            meta: { title: '基本信息', hidden: false }
-          },
-          {
-            path: '/setting/security',
-            component: () => import('@/views/setting/security/index.vue'),
-            name: 'Security',
-            meta: { title: '安全设置', hidden: false }
-          },
-          {
-            path: '/setting/notice',
-            component: () => import('@/views/setting/notice/index.vue'),
-            name: 'Notification',
-            meta: { title: '消息中心', hidden: false }
-          }
-        ]
+        path: '/setting/profile',
+        name: 'SettingProfile',
+        component: () => import('@/views/setting/profile/index.vue'),
+        meta: { title: '账号管理', showInTabs: false }
+      },
+      {
+        path: '/setting/security',
+        name: 'SettingSecurity',
+        component: () => import('@/views/setting/security/index.vue'),
+        meta: { title: '安全设置', showInTabs: false }
       }
     ]
   }

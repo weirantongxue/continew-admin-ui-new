@@ -39,7 +39,6 @@ export interface RoleResp {
   sort: number
   description: string
   dataScope: number
-  status: 1 | 2
   isSystem: boolean
   createUserString: string
   createTime: string
@@ -56,7 +55,6 @@ export interface RoleDetailResp {
   menuIds: Array<number>
   dataScope: number
   deptIds: Array<number>
-  status: 1 | 2
   isSystem: boolean
   createUserString: string
   createTime: string
@@ -66,7 +64,6 @@ export interface RoleDetailResp {
 }
 export interface RoleQuery extends PageQuery {
   description?: string
-  status?: number
 }
 
 /** 系统菜单类型 */
@@ -117,6 +114,25 @@ export interface DeptQuery {
   description?: string
   status?: number
   sort: Array<string>
+}
+
+/** 系统公告类型 */
+export interface NoticeResp {
+  id: string
+  title: string
+  content: string
+  status: number
+  type: string
+  effectiveTime: string
+  terminateTime: string
+  createUserString: string
+  createTime: string
+  updateUserString: string
+  updateTime: string
+}
+export interface NoticeQuery extends PageQuery {
+  title?: string
+  type?: string
 }
 
 /** 系统字典类型 */
@@ -198,30 +214,25 @@ export interface StorageQuery extends PageQuery {
   status?: number
 }
 
-/** 系统参数*/
-export interface OptionQuery {
-  code?: Array<string>
-}
-
-export interface OptionReq {
-  code: string
-  value: string
-}
-
+/** 系统参数类型 */
 export interface OptionResp {
-  name?: string
+  name: string
   code: string
   value: string
-  description?: string
+  description: string
+}
+export interface OptionQuery {
+  code: Array<string>
 }
 
-/** 系统配置*/
-export interface BasicConfigRecordResp {
-  site_title?: string
-  site_copyright?: string
-  site_logo?: string
-  site_favicon?: string
+/** 基础配置类型 */
+export interface BasicConfigResp {
+  site_favicon: string
+  site_logo: string
+  site_title: string
+  site_copyright: string
 }
+
 /** 绑定三方账号信息*/
 export interface BindSocialAccountRes {
   source: string
