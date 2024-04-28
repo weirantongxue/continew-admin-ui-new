@@ -40,6 +40,9 @@ const columns: Columns = [
     field: 'parentId',
     type: 'tree-select',
     data: deptList,
+    hide: (form) => {
+      return form.parentId === 0
+    },
     props: {
       allowClear: true,
       allowSearch: true,
@@ -50,7 +53,8 @@ const columns: Columns = [
         }
         return false
       }
-    }
+    },
+    rules: [{ required: true, message: '请选择上级部门' }]
   },
   { label: '名称', field: 'name', type: 'input', rules: [{ required: true, message: '请输入名称' }] },
   {
