@@ -19,33 +19,15 @@
           <a-input v-model="queryForm.modelId" placeholder="请输入模型名称" allow-clear @change="search">
             <template #prefix><icon-search /></template>
           </a-input>
-          <a-input v-model="queryForm.prompt" placeholder="请输入预设内容" allow-clear @change="search">
-            <template #prefix><icon-search /></template>
-          </a-input>
-          <a-input v-model="queryForm.sort" placeholder="请输入排序值" allow-clear @change="search">
-            <template #prefix><icon-search /></template>
-          </a-input>
-          <a-input v-model="queryForm.status" placeholder="请输入状态（1：启用；2：禁用）" allow-clear @change="search">
-            <template #prefix><icon-search /></template>
-          </a-input>
-          <a-input v-model="queryForm.isDelete" placeholder="请输入是否删除: 0=否, 1=是" allow-clear @change="search">
-            <template #prefix><icon-search /></template>
-          </a-input>
-          <a-input v-model="queryForm.createUser" placeholder="请输入创建人" allow-clear @change="search">
-            <template #prefix><icon-search /></template>
-          </a-input>
-          <a-input v-model="queryForm.createTime" placeholder="请输入创建时间" allow-clear @change="search">
-            <template #prefix><icon-search /></template>
-          </a-input>
           <a-button @click="reset">重置</a-button>
         </template>
         <template #custom-right>
-          <a-button v-permission="['front:modelScript:add']" type="primary" @click="onAdd">
+          <a-button v-permission="['ai:modelScript:add']" type="primary" @click="onAdd">
             <template #icon><icon-plus /></template>
             <span>新增</span>
           </a-button>
           <a-tooltip content="导出">
-            <a-button v-permission="['front:modelScript:export']" @click="onExport">
+            <a-button v-permission="['ai:modelScript:export']" @click="onExport">
               <template #icon>
                 <icon-download />
               </template>
@@ -57,9 +39,9 @@
         </template>
         <template #action="{ record }">
           <a-space>
-            <a-link v-permission="['front:modelScript:update']" @click="onUpdate(record)">修改</a-link>
+            <a-link v-permission="['ai:modelScript:update']" @click="onUpdate(record)">修改</a-link>
             <a-link
-              v-permission="['front:modelScript:delete']"
+              v-permission="['ai:modelScript:delete']"
               status="danger"
               :disabled="record.disabled"
               @click="onDelete(record)"
@@ -103,30 +85,21 @@ const columns: TableInstanceColumns[] = [
   { title: '描述', dataIndex: 'description' },
   { title: '排序值', dataIndex: 'sort' },
   { title: '状态（1：启用；2：禁用）', dataIndex: 'status' },
-  { title: '是否删除: 0=否, 1=是', dataIndex: 'isDelete' },
   { title: '创建人', dataIndex: 'createUser' },
   { title: '创建时间', dataIndex: 'createTime' },
-  { title: '修改人', dataIndex: 'updateUser' },
-  { title: '修改时间', dataIndex: 'updateTime' },
   {
     title: '操作',
     slotName: 'action',
     width: 130,
     align: 'center',
     fixed: !isMobile() ? 'right' : undefined,
-    show: has.hasPermOr(['front:modelScript:update', 'front:modelScript:delete'])
+    show: has.hasPermOr(['ai:modelScript:update', 'ai:modelScript:delete'])
   }
 ]
 
 const queryForm: ModelScriptQuery = reactive({
   name: undefined,
   modelId: undefined,
-  prompt: undefined,
-  sort: undefined,
-  status: undefined,
-  isDelete: undefined,
-  createUser: undefined,
-  createTime: undefined,
   sort: ['createTime,desc']
 })
 
@@ -142,12 +115,6 @@ const {
 const reset = () => {
   queryForm.name = undefined
   queryForm.modelId = undefined
-  queryForm.prompt = undefined
-  queryForm.sort = undefined
-  queryForm.status = undefined
-  queryForm.isDelete = undefined
-  queryForm.createUser = undefined
-  queryForm.createTime = undefined
   search()
 }
 

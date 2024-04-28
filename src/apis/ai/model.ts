@@ -42,11 +42,19 @@ export interface ModelDetailResp {
 export interface ModelQuery extends PageQuery {
   name: string
   modelType: string
+  apiKey: string
+  resType: string
+  status: string
 }
 
 /** @desc 查询AI模型列表 */
 export function listModel(query: ModelQuery) {
   return http.get<PageRes<ModelResp[]>>(`${BASE_URL}`, query)
+}
+
+/** @desc 查询AI模型列表 */
+export function list(query: ModelQuery) {
+  return http.get<ModelResp[]>(`${BASE_URL}/list`, query)
 }
 
 /** @desc 查询AI模型详情 */

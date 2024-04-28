@@ -16,11 +16,14 @@
           <a-input v-model="queryForm.taskId" placeholder="请输入任务id" allow-clear @change="search">
             <template #prefix><icon-search /></template>
           </a-input>
+          <a-input v-model="queryForm.state" placeholder="请输入任务状态success" allow-clear @change="search">
+            <template #prefix><icon-search /></template>
+          </a-input>
           <a-button @click="reset">重置</a-button>
         </template>
         <template #custom-right>
           <a-tooltip content="导出">
-            <a-button v-permission="['front:drawTask:export']" @click="onExport">
+            <a-button v-permission="['ai:drawTask:export']" @click="onExport">
               <template #icon>
                 <icon-download />
               </template>
@@ -33,7 +36,7 @@
         <template #action="{ record }">
           <a-space>
             <a-link
-              v-permission="['front:drawTask:delete']"
+              v-permission="['ai:drawTask:delete']"
               status="danger"
               :disabled="record.disabled"
               @click="onDelete(record)"
@@ -45,7 +48,6 @@
       </GiTable>
     </a-card>
 
-    <DrawTaskAddModal ref="DrawTaskAddModalRef" @save-success="search" />
     <DrawTaskDetailDrawer ref="DrawTaskDetailDrawerRef" />
   </div>
 </template>
@@ -68,19 +70,20 @@ const columns: TableInstanceColumns[] = [
   { title: '传递id', dataIndex: 'nonce' },
   { title: '任务状态success', dataIndex: 'state' },
   { title: '创建时间', dataIndex: 'createTime' },
-  { title: '创建人', dataIndex: 'createUserString' },
+  { title: '创建人', dataIndex: 'createUser' },
   {
     title: '操作',
     slotName: 'action',
     width: 130,
     align: 'center',
     fixed: !isMobile() ? 'right' : undefined,
-    show: has.hasPermOr(['front:drawTask:update', 'front:drawTask:delete'])
+    show: has.hasPermOr(['ai:drawTask:update', 'ai:drawTask:delete'])
   }
 ]
 
 const queryForm: DrawTaskQuery = reactive({
   taskId: undefined,
+  state: undefined,
   sort: ['createTime,desc']
 })
 
@@ -95,6 +98,7 @@ const {
 // 重置
 const reset = () => {
   queryForm.taskId = undefined
+  queryForm.state = undefined
   search()
 }
 

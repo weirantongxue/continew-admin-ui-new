@@ -14,6 +14,7 @@
 </template>
 
 <script setup lang="ts">
+import type { ModelResp } from './type'
 import { getModel, addModel, updateModel } from '@/apis/ai/model'
 import { Message } from '@arco-design/web-vue'
 import { GiForm, type Columns } from '@/components/GiForm'
@@ -38,9 +39,15 @@ const columns: Columns = [
     rules: [{ required: true, message: '请输入模型名称' }]
   },
   {
-    label: '模型类型,1:大语言模型,2:文生图',
+    label: '模型类型',
     field: 'modelType',
-    rules: [{ required: true, message: '请输入模型类型,1:大语言模型,2:文生图' }]
+    type: 'select',
+    options: [
+      { label: '大语言模型', value: '1' },
+      { label: '文生图', value: '2' }
+      // 添加更多选项...
+    ],
+    rules: [{ required: true, message: '请输入模型类型' }]
   },
   {
     label: '模型图标',
@@ -64,10 +71,16 @@ const columns: Columns = [
     type: 'input'
   },
   {
-    label: 'stream:流式,sync:同步,async:异步',
+    label: '接口类型',
     field: 'resType',
-    type: 'input',
-    rules: [{ required: true, message: '请输入stream:流式,sync:同步,async:异步' }]
+    type: 'select',
+    options: [
+      { label: '流式', value: 'stream' },
+      { label: '同步', value: 'sync' },
+      { label: '异步', value: 'async' }
+      // 添加更多选项...
+    ],
+    rules: [{ required: true, message: '请输入接口类型' }]
   },
   {
     label: '描述',
@@ -81,32 +94,23 @@ const columns: Columns = [
     rules: [{ required: true, message: '请输入排序值' }]
   },
   {
-    label: '状态（1：启用；2：禁用）',
+    label: '状态',
     field: 'status',
-    type: 'input'
-  },
-  {
-    label: '是否删除: 0=否, 1=是',
-    field: 'isDelete',
-    type: 'input'
-  },
-  {
-    label: '创建人',
-    field: 'createUser',
-    type: 'input'
-  },
-  {
-    label: '创建时间',
-    field: 'createTime',
-    type: 'input'
+    type: 'switch',
+    props: {
+      type: 'round',
+      checkedValue: 1,
+      uncheckedValue: 2,
+      checkedText: '启用',
+      uncheckedText: '禁用'
+    }
   }
 ]
 
-const { form, resetForm } =
-  useForm <
-  {
-    // todo 待补充
-  }
+const { form, resetForm } = useForm<ModelResp>({
+  sort: 999,
+  status: 1
+})
 
 // 重置
 const reset = () => {

@@ -12,11 +12,8 @@ export interface ModelScriptResp {
   description: string
   sort: string
   status: string
-  isDelete: string
   createUser: string
   createTime: string
-  updateUser: string
-  updateTime: string
   createUserString: string
   updateUserString: string
 }
@@ -41,12 +38,6 @@ export interface ModelScriptDetailResp {
 export interface ModelScriptQuery extends PageQuery {
   name: string
   modelId: string
-  prompt: string
-  sort: string
-  status: string
-  isDelete: string
-  createUser: string
-  createTime: string
 }
 
 /** @desc 查询模型预设脚本列表 */

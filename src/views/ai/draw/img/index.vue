@@ -16,11 +16,14 @@
           <a-input v-model="queryForm.taskId" placeholder="请输入任务id" allow-clear @change="search">
             <template #prefix><icon-search /></template>
           </a-input>
+          <a-input v-model="queryForm.createTime" placeholder="请输入创建时间" allow-clear @change="search">
+            <template #prefix><icon-search /></template>
+          </a-input>
           <a-button @click="reset">重置</a-button>
         </template>
         <template #custom-right>
           <a-tooltip content="导出">
-            <a-button v-permission="['front:drawImg:export']" @click="onExport">
+            <a-button v-permission="['ai:drawImg:export']" @click="onExport">
               <template #icon>
                 <icon-download />
               </template>
@@ -33,7 +36,7 @@
         <template #action="{ record }">
           <a-space>
             <a-link
-              v-permission="['front:drawImg:delete']"
+              v-permission="['ai:drawImg:delete']"
               status="danger"
               :disabled="record.disabled"
               @click="onDelete(record)"
@@ -57,26 +60,28 @@ import { useTable, useDownload } from '@/hooks'
 import { isMobile } from '@/utils'
 import has from '@/utils/has'
 
-defineOptions({ name: 'DrawImg' })
+defineOptions({ name: 'AiDrawImg' })
 
 const columns: TableInstanceColumns[] = [
   { title: '主键', dataIndex: 'id' },
   { title: '任务id', dataIndex: 'taskId' },
   { title: '图片地址', dataIndex: 'imageUrl' },
+  { title: '是否删除: [0=否, 1=是]', dataIndex: 'isDeleted' },
   { title: '创建时间', dataIndex: 'createTime' },
-  { title: '创建人', dataIndex: 'createUserString' },
+  { title: '创建人', dataIndex: 'createUser' },
   {
     title: '操作',
     slotName: 'action',
     width: 130,
     align: 'center',
     fixed: !isMobile() ? 'right' : undefined,
-    show: has.hasPermOr(['front:drawImg:update', 'front:drawImg:delete'])
+    show: has.hasPermOr(['ai:drawImg:update', 'ai:drawImg:delete'])
   }
 ]
 
 const queryForm: DrawImgQuery = reactive({
   taskId: undefined,
+  createTime: undefined,
   sort: ['createTime,desc']
 })
 
@@ -91,6 +96,7 @@ const {
 // 重置
 const reset = () => {
   queryForm.taskId = undefined
+  queryForm.createTime = undefined
   search()
 }
 
@@ -106,8 +112,6 @@ const onDelete = (item: DrawImgResp) => {
 const onExport = () => {
   useDownload(() => exportDrawImg(queryForm))
 }
-
-const DrawImgAddModalRef = ref<InstanceType<typeof DrawImgAddModal>>()
 
 const DrawImgDetailDrawerRef = ref<InstanceType<typeof DrawImgDetailDrawer>>()
 // 详情

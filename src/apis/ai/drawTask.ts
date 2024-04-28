@@ -31,6 +31,7 @@ export interface DrawTaskDetailResp {
 }
 export interface DrawTaskQuery extends PageQuery {
   taskId: string
+  state: string
 }
 
 /** @desc 查询绘图任务列表 */

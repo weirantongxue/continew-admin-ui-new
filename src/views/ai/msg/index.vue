@@ -32,7 +32,7 @@
         </template>
         <template #custom-right>
           <a-tooltip content="导出">
-            <a-button v-permission="['front:chatMessage:export']" @click="onExport">
+            <a-button v-permission="['ai:chatMessage:export']" @click="onExport">
               <template #icon>
                 <icon-download />
               </template>
@@ -45,7 +45,7 @@
         <template #action="{ record }">
           <a-space>
             <a-link
-              v-permission="['front:chatMessage:delete']"
+              v-permission="['ai:chatMessage:delete']"
               status="danger"
               :disabled="record.disabled"
               @click="onDelete(record)"
@@ -79,7 +79,7 @@ defineOptions({ name: 'AiMsg' })
 
 const columns: TableInstanceColumns[] = [
   { title: '主键', dataIndex: 'id' },
-  { title: '会话id', dataIndex: 'itemId' },
+  { title: '会话id', slotName: 'itemId' },
   { title: '消息id', dataIndex: 'messageId' },
   { title: '任务id', dataIndex: 'taskId' },
   { title: '提问', dataIndex: 'question' },
@@ -93,14 +93,14 @@ const columns: TableInstanceColumns[] = [
   { title: '总请求耗时', dataIndex: 'responseTime' },
   { title: '聊天耗时', dataIndex: 'chatResponseTime' },
   { title: '创建时间', dataIndex: 'createTime' },
-  { title: '创建人', dataIndex: 'createUserString' },
+  { title: '创建人', dataIndex: 'createUser' },
   {
     title: '操作',
     slotName: 'action',
     width: 130,
     align: 'center',
     fixed: !isMobile() ? 'right' : undefined,
-    show: has.hasPermOr(['front:chatMessage:update', 'front:chatMessage:delete'])
+    show: has.hasPermOr(['ai:chatMessage:delete'])
   }
 ]
 

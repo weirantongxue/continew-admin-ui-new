@@ -31,7 +31,6 @@ export interface ItemQuery extends PageQuery {
   name: string
   modelScriptId: string
   createTime: string
-  createUser: string
 }
 
 /** @desc 查询AI会话列表 */

@@ -6,6 +6,7 @@ export interface DrawImgResp {
   id: string
   taskId: string
   imageUrl: string
+  isDeleted: string
   createTime: string
   createUser: string
   createUserString: string
@@ -25,6 +26,7 @@ export interface DrawImgDetailResp {
 }
 export interface DrawImgQuery extends PageQuery {
   taskId: string
+  createTime: string
 }
 
 /** @desc 查询绘图素材列表 */

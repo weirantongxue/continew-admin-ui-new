@@ -24,15 +24,29 @@
           >
             <template #prefix><icon-search /></template>
           </a-input>
+          <a-input v-model="queryForm.apiKey" placeholder="请输入apikey" allow-clear @change="search">
+            <template #prefix><icon-search /></template>
+          </a-input>
+          <a-input
+            v-model="queryForm.resType"
+            placeholder="请输入stream:流式,sync:同步,async:异步"
+            allow-clear
+            @change="search"
+          >
+            <template #prefix><icon-search /></template>
+          </a-input>
+          <a-input v-model="queryForm.status" placeholder="请输入状态（1：启用；2：禁用）" allow-clear @change="search">
+            <template #prefix><icon-search /></template>
+          </a-input>
           <a-button @click="reset">重置</a-button>
         </template>
         <template #custom-right>
-          <a-button v-permission="['front:model:add']" type="primary" @click="onAdd">
+          <a-button v-permission="['ai:model:add']" type="primary" @click="onAdd">
             <template #icon><icon-plus /></template>
             <span>新增</span>
           </a-button>
           <a-tooltip content="导出">
-            <a-button v-permission="['front:model:export']" @click="onExport">
+            <a-button v-permission="['ai:model:export']" @click="onExport">
               <template #icon>
                 <icon-download />
               </template>
@@ -44,9 +58,9 @@
         </template>
         <template #action="{ record }">
           <a-space>
-            <a-link v-permission="['front:model:update']" @click="onUpdate(record)">修改</a-link>
+            <a-link v-permission="['ai:model:update']" @click="onUpdate(record)">修改</a-link>
             <a-link
-              v-permission="['front:model:delete']"
+              v-permission="['ai:model:delete']"
               status="danger"
               :disabled="record.disabled"
               @click="onDelete(record)"
@@ -94,13 +108,16 @@ const columns: TableInstanceColumns[] = [
     width: 130,
     align: 'center',
     fixed: !isMobile() ? 'right' : undefined,
-    show: has.hasPermOr(['front:model:update', 'front:model:delete'])
+    show: has.hasPermOr(['ai:model:update', 'ai:model:delete'])
   }
 ]
 
 const queryForm: ModelQuery = reactive({
   name: undefined,
   modelType: undefined,
+  apiKey: undefined,
+  resType: undefined,
+  status: undefined,
   sort: ['createTime,desc']
 })
 
@@ -116,6 +133,9 @@ const {
 const reset = () => {
   queryForm.name = undefined
   queryForm.modelType = undefined
+  queryForm.apiKey = undefined
+  queryForm.resType = undefined
+  queryForm.status = undefined
   search()
 }
 

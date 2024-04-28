@@ -22,14 +22,11 @@
           <a-input v-model="queryForm.createTime" placeholder="请输入创建时间" allow-clear @change="search">
             <template #prefix><icon-search /></template>
           </a-input>
-          <a-input v-model="queryForm.createUser" placeholder="请输入创建人" allow-clear @change="search">
-            <template #prefix><icon-search /></template>
-          </a-input>
           <a-button @click="reset">重置</a-button>
         </template>
         <template #custom-right>
           <a-tooltip content="导出">
-            <a-button v-permission="['front:item:export']" @click="onExport">
+            <a-button v-permission="['ai:item:export']" @click="onExport">
               <template #icon>
                 <icon-download />
               </template>
@@ -42,7 +39,7 @@
         <template #action="{ record }">
           <a-space>
             <a-link
-              v-permission="['front:item:delete']"
+              v-permission="['ai:item:delete']"
               status="danger"
               :disabled="record.disabled"
               @click="onDelete(record)"
@@ -69,8 +66,8 @@ import has from '@/utils/has'
 defineOptions({ name: 'AiItem' })
 
 const columns: TableInstanceColumns[] = [
-  { title: '主键', dataIndex: 'id' },
-  { title: '会话名称', dataIndex: 'name' },
+  // { title: '主键', dataIndex: 'id' },
+  { title: '会话名称', slotName: 'name' },
   { title: '脚本id', dataIndex: 'modelScriptId' },
   { title: '最后一条消息', dataIndex: 'lastMessage' },
   { title: '消息数', dataIndex: 'number' },
@@ -82,7 +79,7 @@ const columns: TableInstanceColumns[] = [
     width: 130,
     align: 'center',
     fixed: !isMobile() ? 'right' : undefined,
-    show: has.hasPermOr(['front:item:update', 'front:item:delete'])
+    show: has.hasPermOr(['ai:item:delete'])
   }
 ]
 
@@ -90,7 +87,6 @@ const queryForm: ItemQuery = reactive({
   name: undefined,
   modelScriptId: undefined,
   createTime: undefined,
-  createUser: undefined,
   sort: ['createTime,desc']
 })
 
@@ -107,7 +103,6 @@ const reset = () => {
   queryForm.name = undefined
   queryForm.modelScriptId = undefined
   queryForm.createTime = undefined
-  queryForm.createUser = undefined
   search()
 }
 

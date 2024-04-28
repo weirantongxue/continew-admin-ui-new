@@ -7,9 +7,13 @@
       <a-descriptions-item label="拼接图">{{ dataDetail?.mosaicImg }}</a-descriptions-item>
       <a-descriptions-item label="传递id">{{ dataDetail?.nonce }}</a-descriptions-item>
       <a-descriptions-item label="任务状态success">{{ dataDetail?.state }}</a-descriptions-item>
+      <a-descriptions-item label="是否删除: [0=否, 1=是]">{{ dataDetail?.isDeleted }}</a-descriptions-item>
       <a-descriptions-item label="创建时间">{{ dataDetail?.createTime }}</a-descriptions-item>
-      <a-descriptions-item label="创建人id">{{ dataDetail?.createUser }}</a-descriptions-item>
+      <a-descriptions-item label="创建人">{{ dataDetail?.createUser }}</a-descriptions-item>
       <a-descriptions-item label="创建人">{{ dataDetail?.createUserString }}</a-descriptions-item>
+      <a-descriptions-item label="更新时间">{{ dataDetail?.updateTime }}</a-descriptions-item>
+      <a-descriptions-item label="修改人">{{ dataDetail?.updateUser }}</a-descriptions-item>
+      <a-descriptions-item label="修改人">{{ dataDetail?.updateUserString }}</a-descriptions-item>
     </a-descriptions>
   </a-drawer>
 </template>

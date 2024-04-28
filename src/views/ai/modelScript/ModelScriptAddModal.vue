@@ -14,7 +14,9 @@
 </template>
 
 <script setup lang="ts">
+import type { ModelScriptResp } from './type'
 import { getModelScript, addModelScript, updateModelScript } from '@/apis/ai/modelScript'
+import { list } from '@/apis/ai/model'
 import { Message } from '@arco-design/web-vue'
 import { GiForm, type Columns } from '@/components/GiForm'
 import { useForm } from '@/hooks'
@@ -40,7 +42,13 @@ const columns: Columns = [
   {
     label: '模型名称',
     field: 'modelId',
-    type: 'input',
+    type: 'select',
+    options: [
+      { label: 'cogview', value: '561601332016967687' },
+      { label: 'chuzhanAi', value: '561601332016967686' },
+      { label: 'glm-4', value: '561601332016967685' }
+      // 添加更多选项...
+    ],
     rules: [{ required: true, message: '请输入模型名称' }]
   },
   {
@@ -50,42 +58,44 @@ const columns: Columns = [
     rules: [{ required: true, message: '请输入预设内容' }]
   },
   {
+    label: '封面',
+    field: 'coverUrl',
+    type: 'input'
+  },
+  {
+    label: '组件路径',
+    field: 'component',
+    type: 'input'
+  },
+  {
+    label: '描述',
+    field: 'description',
+    type: 'input'
+  },
+  {
     label: '排序值',
     field: 'sort',
     type: 'input',
     rules: [{ required: true, message: '请输入排序值' }]
   },
   {
-    label: '状态（1：启用；2：禁用）',
+    label: '状态',
     field: 'status',
-    type: 'input',
-    rules: [{ required: true, message: '请输入状态（1：启用；2：禁用）' }]
-  },
-  {
-    label: '是否删除: 0=否, 1=是',
-    field: 'isDelete',
-    type: 'input',
-    rules: [{ required: true, message: '请输入是否删除: 0=否, 1=是' }]
-  },
-  {
-    label: '创建人',
-    field: 'createUser',
-    type: 'input',
-    rules: [{ required: true, message: '请输入创建人' }]
-  },
-  {
-    label: '创建时间',
-    field: 'createTime',
-    type: 'input',
-    rules: [{ required: true, message: '请输入创建时间' }]
+    type: 'switch',
+    props: {
+      type: 'round',
+      checkedValue: 1,
+      uncheckedValue: 2,
+      checkedText: '启用',
+      uncheckedText: '禁用'
+    }
   }
 ]
 
-const { form, resetForm } =
-  useForm <
-  {
-    // todo 待补充
-  }
+const { form, resetForm } = useForm<ModelScriptResp>({
+  sort: 999,
+  status: 1
+})
 
 // 重置
 const reset = () => {
