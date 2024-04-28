@@ -66,7 +66,7 @@ import has from '@/utils/has'
 defineOptions({ name: 'AiItem' })
 
 const columns: TableInstanceColumns[] = [
-  // { title: '主键', dataIndex: 'id' },
+  { title: '主键', dataIndex: 'id' },
   { title: '会话名称', slotName: 'name' },
   { title: '脚本id', dataIndex: 'modelScriptId' },
   { title: '最后一条消息', dataIndex: 'lastMessage' },
