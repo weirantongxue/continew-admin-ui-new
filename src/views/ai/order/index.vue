@@ -36,8 +36,8 @@
             </a-button>
           </a-tooltip>
         </template>
-        <template #name="{ record }">
-          <a-link @click="onDetail(record)">{{ record.name }}</a-link>
+        <template #id="{ record }">
+          <a-link @click="onDetail(record)">{{ record.id }}</a-link>
         </template>
         <template #action="{ record }">
           <a-space>
@@ -60,7 +60,13 @@
 </template>
 
 <script setup lang="ts">
-import { listOrderInfo, deleteOrderInfo, exportOrderInfo, type OrderInfoResp, type OrderInfoQuery } from '@/apis/ai/orderInfo'
+import {
+  listOrderInfo,
+  deleteOrderInfo,
+  exportOrderInfo,
+  type OrderInfoResp,
+  type OrderInfoQuery
+} from '@/apis/ai/orderInfo'
 import OrderInfoDetailDrawer from './OrderInfoDetailDrawer.vue'
 import type { TableInstanceColumns } from '@/components/GiTable/type'
 import { useTable, useDownload } from '@/hooks'
@@ -70,7 +76,7 @@ import has from '@/utils/has'
 defineOptions({ name: 'OrderInfo' })
 
 const columns: TableInstanceColumns[] = [
-  { title: '订单id', dataIndex: 'id' },
+  { title: '订单id', slotName: 'id' },
   { title: '订单标题', dataIndex: 'title' },
   { title: '商户订单编号', dataIndex: 'orderNo' },
   { title: '支付产品id', dataIndex: 'productId' },

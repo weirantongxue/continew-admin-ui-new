@@ -34,8 +34,8 @@
             </a-button>
           </a-tooltip>
         </template>
-        <template #name="{ record }">
-          <a-link @click="onDetail(record)">{{ record.name }}</a-link>
+        <template #id="{ record }">
+          <a-link @click="onDetail(record)">{{ record.id }}</a-link>
         </template>
         <template #action="{ record }">
           <a-space>
@@ -76,7 +76,7 @@ import has from '@/utils/has'
 defineOptions({ name: 'AiModelScript' })
 
 const columns: TableInstanceColumns[] = [
-  { title: '主键', dataIndex: 'id' },
+  { title: '主键', slotName: 'id' },
   { title: '脚本名称', dataIndex: 'name' },
   { title: '模型名称', dataIndex: 'modelId' },
   { title: '预设内容', dataIndex: 'prompt' },

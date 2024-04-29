@@ -39,8 +39,8 @@
             </a-button>
           </a-tooltip>
         </template>
-        <template #name="{ record }">
-          <a-link @click="onDetail(record)">{{ record.name }}</a-link>
+        <template #id="{ record }">
+          <a-link @click="onDetail(record)">{{ record.id }}</a-link>
         </template>
         <template #action="{ record }">
           <a-space>
@@ -78,8 +78,8 @@ import has from '@/utils/has'
 defineOptions({ name: 'AiMsg' })
 
 const columns: TableInstanceColumns[] = [
-  { title: '主键', dataIndex: 'id' },
-  { title: '会话id', slotName: 'itemId' },
+  { title: '主键', slotName: 'id' },
+  { title: '会话id', dataIndex: 'itemId' },
   { title: '消息id', dataIndex: 'messageId' },
   { title: '任务id', dataIndex: 'taskId' },
   { title: '提问', dataIndex: 'question' },
