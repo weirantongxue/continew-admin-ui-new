@@ -17,7 +17,13 @@
         </a-dropdown>
 
         <a-input-group>
-          <a-input v-model="queryForm.name" placeholder="请输入文件名" allow-clear @change="search" />
+          <a-input
+            v-model="queryForm.name"
+            placeholder="请输入文件名"
+            allow-clear
+            style="width: 200px"
+            @change="search"
+          />
           <a-button type="primary" @click="search">
             <template #icon>
               <icon-search />
@@ -47,11 +53,11 @@
           <template #default>{{ isBatchMode ? '取消批量' : '批量操作' }}</template>
         </a-button>
         <a-button-group>
-          <a-tooltip content="视图" position="bottom">
-            <a-button @click="toggleMode">
+          <a-tooltip content="视图">
+            <a-button class="gi_hover_btn-border" @click="toggleMode">
               <template #icon>
-                <icon-apps v-if="mode === 'grid'" />
-                <icon-list v-else />
+                <icon-list v-if="mode === 'grid'" />
+                <icon-apps v-else />
               </template>
             </a-button>
           </a-tooltip>
@@ -88,7 +94,7 @@
 </template>
 
 <script setup lang="ts">
-import { listFile, uploadFile, deleteFile, type FileItem, type FileQuery } from '@/apis'
+import { listFile, uploadFile, deleteFile, type FileItem, type FileQuery, type FilePageQuery } from '@/apis'
 import { Message, Modal, type RequestOption } from '@arco-design/web-vue'
 import FileGrid from './FileGrid.vue'
 import {
@@ -102,6 +108,7 @@ import { ImageTypes } from '@/constant/file'
 import { api as viewerApi } from 'v-viewer'
 import 'viewerjs/dist/viewer.css'
 import { downloadByUrl } from '@/utils/downloadFile'
+
 const FileList = defineAsyncComponent(() => import('./FileList.vue'))
 onMounted(() => {
   const fileMainDom = document.getElementById('fileMain')
@@ -132,7 +139,7 @@ const handleScroll = (event) => {
 const route = useRoute()
 const { mode, selectedFileIds, toggleMode, addSelectedFileItem } = useFileManage()
 
-const queryForm = reactive({
+const queryForm = reactive<FileQuery>({
   name: undefined,
   type: route.query.type?.toString() || undefined,
   sort: ['updateTime,desc']
@@ -145,7 +152,7 @@ const fileList = ref<FileItem[]>([])
 const isBatchMode = ref(false)
 const loading = ref(false)
 // 查询文件列表
-const getFileList = async (query: FileQuery = { ...queryForm, page: pagination.page, size: pagination.size }) => {
+const getFileList = async (query: FilePageQuery = { ...queryForm, page: pagination.page, size: pagination.size }) => {
   try {
     loading.value = true
     isBatchMode.value = false

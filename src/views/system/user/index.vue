@@ -6,7 +6,15 @@
           <a-input v-model="deptName" placeholder="请输入部门名称" allow-clear style="margin-bottom: 10px">
             <template #prefix><icon-search /></template>
           </a-input>
-          <a-tree ref="treeRef" :data="deptList" default-expand-all show-line block-node @select="handleSelectDept">
+          <a-tree
+            ref="treeRef"
+            :data="deptList"
+            :selected-keys="selectedKeys"
+            default-expand-all
+            show-line
+            block-node
+            @select="handleSelectDept"
+          >
           </a-tree>
         </a-col>
         <a-col :xs="24" :md="20" :lg="20" :xl="20" :xxl="20">
@@ -49,10 +57,10 @@
                 </a-button>
               </a-tooltip>
             </template>
-            <template #nickname="{ record }">
+            <template #username="{ record }">
               <GiCellAvatar
                 :avatar="getAvatar(record.avatar, record.gender)"
-                :name="record.nickname"
+                :name="record.username"
                 is-link
                 @click="onDetail(record)"
               />
@@ -80,7 +88,7 @@
                   删除
                 </a-link>
                 <a-dropdown>
-                  <a-button v-if="has.hasPermOr(['system:user:resetPwd'])" type="text">更多</a-button>
+                  <a-link v-if="has.hasPermOr(['system:user:resetPwd'])" type="text">更多</a-link>
                   <template #content>
                     <a-doption v-permission="['system:user:resetPwd']" @click="onResetPwd(record)">重置密码</a-doption>
                   </template>
@@ -99,7 +107,7 @@
 </template>
 
 <script setup lang="ts">
-import { listUser, deleteUser, exportUser, type UserResp } from '@/apis'
+import { listUser, deleteUser, exportUser, type UserResp, type UserQuery } from '@/apis'
 import UserAddModal from './UserAddModal.vue'
 import UserDetailDrawer from './UserDetailDrawer.vue'
 import UserResetPwdModal from './UserResetPwdModal.vue'
@@ -123,19 +131,19 @@ const columns: TableInstanceColumns[] = [
     fixed: !isMobile() ? 'left' : undefined
   },
   {
-    title: '昵称',
-    slotName: 'nickname',
-    width: 170,
+    title: '用户名',
+    slotName: 'username',
+    width: 140,
     ellipsis: true,
     tooltip: true,
     fixed: !isMobile() ? 'left' : undefined
   },
-  { title: '用户名', dataIndex: 'username', width: 120, ellipsis: true, tooltip: true },
+  { title: '昵称', dataIndex: 'nickname', width: 120, ellipsis: true, tooltip: true },
   { title: '状态', slotName: 'status', align: 'center' },
   { title: '性别', slotName: 'gender', align: 'center' },
+  { title: '所属部门', dataIndex: 'deptName', ellipsis: true, tooltip: true },
   { title: '手机号', dataIndex: 'phone', width: 170, ellipsis: true, tooltip: true },
   { title: '邮箱', dataIndex: 'email', width: 170, ellipsis: true, tooltip: true },
-  { title: '所属部门', dataIndex: 'deptName', ellipsis: true, tooltip: true },
   { title: '系统内置', slotName: 'isSystem', width: 100, align: 'center', show: false },
   { title: '描述', dataIndex: 'description', ellipsis: true, tooltip: true },
   { title: '创建人', dataIndex: 'createUserString', ellipsis: true, tooltip: true, show: false },
@@ -152,10 +160,7 @@ const columns: TableInstanceColumns[] = [
   }
 ]
 
-const queryForm = reactive({
-  description: undefined,
-  status: undefined,
-  deptId: undefined,
+const queryForm = reactive<UserQuery>({
   sort: ['createTime,desc']
 })
 
@@ -165,7 +170,7 @@ const {
   pagination,
   search,
   handleDelete
-} = useTable((p) => listUser({ ...queryForm, page: p.page, size: p.size }), { immediate: true })
+} = useTable((p) => listUser({ ...queryForm, page: p.page, size: p.size }), { immediate: false })
 
 // 重置
 const reset = () => {
@@ -194,8 +199,13 @@ const { deptList, getDeptList } = useDept({
   onSuccess: () => {
     nextTick(() => {
       treeRef.value?.expandAll(true)
+      queryForm.deptId = deptList.value[0]?.key as string
+      search()
     })
   }
+})
+const selectedKeys = computed(() => {
+  return [queryForm.deptId ? queryForm.deptId : '']
 })
 watch(deptName, (val) => {
   getDeptList(val)
@@ -203,13 +213,7 @@ watch(deptName, (val) => {
 
 // 根据选中部门查询
 const handleSelectDept = (keys: Array<any>) => {
-  if (queryForm.deptId === keys[0]) {
-    queryForm.deptId = undefined
-    // 如已选中，再次点击则取消选中
-    treeRef.value?.selectNode(keys, false)
-  } else {
-    queryForm.deptId = keys.length === 1 ? keys[0] : undefined
-  }
+  queryForm.deptId = keys.length === 1 ? keys[0] : undefined
   search()
 }
 
