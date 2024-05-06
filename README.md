@@ -4,7 +4,7 @@
 <img src="https://img.shields.io/badge/License-Apache--2.0-blue.svg" alt="License" />
 </a>
 <a href="https://github.com/Charles7c/continew-admin-ui" target="_blank">
-<img src="https://img.shields.io/badge/RELEASE-v3.0.1-%23ff3f59.svg" alt="Release" />
+<img src="https://img.shields.io/badge/SNAPSHOT-v3.1.0-%23ff3f59.svg" alt="Release" />
 </a>
 <a href="https://github.com/Charles7c/continew-admin" target="_blank">
 <img src="https://img.shields.io/github/stars/Charles7c/continew-admin?style=social" alt="GitHub stars" />
@@ -249,7 +249,6 @@ continew-admin-ui      # 前端项目
 ├─ tsconfig.json
 ├─ vite.config.ts
 ├─ .gitignore（Git 忽略文件相关配置文件）
-├─ .gitee（Gitee 相关配置目录，实际开发时直接删除）
 ├─ .github（GitHub 相关配置目录，实际开发时直接删除）
 ├─ .idea
 │  └─ icon.png（IDEA 项目图标，实际开发时直接删除）
