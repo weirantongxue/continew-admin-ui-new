@@ -19,7 +19,7 @@
           <a-input v-model="queryForm.name" placeholder="请输入支付名称" allow-clear @change="search">
             <template #prefix><icon-search /></template>
           </a-input>
-          <a-input v-model="queryForm.status" placeholder="请输入方式状态: [0=关闭, 1=开启]" allow-clear @change="search">
+          <a-input v-model="queryForm.status" placeholder="状态" allow-clear @change="search">
             <template #prefix><icon-search /></template>
           </a-input>
           <a-button @click="reset">重置</a-button>
@@ -76,14 +76,15 @@ const columns: TableInstanceColumns[] = [
   { title: '主键', dataIndex: 'id' },
   { title: '支付名称', dataIndex: 'name' },
   { title: '渠道图标', dataIndex: 'icon' },
-  { title: '支付方式: [1=余额支付, 2=微信支付, 3=支付宝支付]', dataIndex: 'way' },
-  { title: '排序编号', dataIndex: 'sort' },
+  { title: '支付方式', dataIndex: 'way' },
   { title: '备注信息', dataIndex: 'remark' },
   { title: '配置参数', dataIndex: 'params' },
-  { title: '默认支付: [0=否的, 1=是的]', dataIndex: 'isDefault' },
-  { title: '方式状态: [0=关闭, 1=开启]', dataIndex: 'status' },
+  { title: '默认支付', dataIndex: 'isDefault' },
+  { title: '方式状态', dataIndex: 'status' },
   { title: '创建时间', dataIndex: 'createTime' },
   { title: '创建人', dataIndex: 'createUser' },
+  { title: '排序编号', dataIndex: 'sort' },
+
   {
     title: '操作',
     slotName: 'action',

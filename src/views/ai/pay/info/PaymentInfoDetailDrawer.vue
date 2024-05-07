@@ -1,6 +1,6 @@
 <template>
-  <a-drawer v-model:visible="visible" title="支付信息详情" :width="width >= 580 ? 580 : '100%'" :footer="false">
-    <a-descriptions :column="2" size="large" class="general-description">
+  <a-drawer v-model:visible="visible" title="支付信息详情" :width="720" :footer="false">
+    <a-descriptions title="基本信息" :column="2" size="large" class="general-description">
       <a-descriptions-item label="支付记录id">{{ dataDetail?.id }}</a-descriptions-item>
       <a-descriptions-item label="商户订单编号">{{ dataDetail?.orderNo }}</a-descriptions-item>
       <a-descriptions-item label="支付系统交易编号">{{ dataDetail?.transactionId }}</a-descriptions-item>
@@ -8,9 +8,27 @@
       <a-descriptions-item label="交易类型">{{ dataDetail?.tradeType }}</a-descriptions-item>
       <a-descriptions-item label="交易状态">{{ dataDetail?.tradeState }}</a-descriptions-item>
       <a-descriptions-item label="支付金额(元)">{{ dataDetail?.payerTotal }}</a-descriptions-item>
-      <a-descriptions-item label="通知参数">{{ dataDetail?.content }}</a-descriptions-item>
+<!--      <a-descriptions-item label="通知参数">{{ dataDetail?.content }}</a-descriptions-item>-->
       <a-descriptions-item label="创建时间">{{ dataDetail?.createTime }}</a-descriptions-item>
       <a-descriptions-item label="更新时间">{{ dataDetail?.updateTime }}</a-descriptions-item>
+    </a-descriptions>
+
+    <a-descriptions
+      title="通知参数"
+      :column="2"
+      size="large"
+      class="general-description http"
+      style="margin-top: 20px; position: relative"
+
+    >
+      <a-descriptions-item :span="2">
+        <a-tabs type="card">
+          <a-tab-pane title="参数">
+            <JsonPretty v-if="dataDetail?.content" :json="dataDetail?.content" />
+            <span v-else>无</span>
+          </a-tab-pane>
+        </a-tabs>
+      </a-descriptions-item>
     </a-descriptions>
   </a-drawer>
 </template>

@@ -1,6 +1,6 @@
 <template>
-  <a-drawer v-model:visible="visible" title="订单信息详情" :width="width >= 580 ? 580 : '100%'" :footer="false">
-    <a-descriptions :column="2" size="large" class="general-description">
+  <a-drawer v-model:visible="visible" title="订单详情" :width="720" :footer="false">
+    <a-descriptions title="基本信息" :column="2" size="large" class="general-description">
       <a-descriptions-item label="订单id">{{ dataDetail?.id }}</a-descriptions-item>
       <a-descriptions-item label="订单标题">{{ dataDetail?.title }}</a-descriptions-item>
       <a-descriptions-item label="商户订单编号">{{ dataDetail?.orderNo }}</a-descriptions-item>
@@ -9,10 +9,10 @@
       <a-descriptions-item label="订单二维码连接">{{ dataDetail?.codeUrl }}</a-descriptions-item>
       <a-descriptions-item label="部门账户信息">{{ dataDetail?.deptId }}</a-descriptions-item>
       <a-descriptions-item label="订单状态">{{ dataDetail?.orderStatus }}</a-descriptions-item>
-      <a-descriptions-item label="创建人">{{ dataDetail?.createUser }}</a-descriptions-item>
+<!--      <a-descriptions-item label="创建人">{{ dataDetail?.createUser }}</a-descriptions-item>-->
       <a-descriptions-item label="创建人">{{ dataDetail?.createUserString }}</a-descriptions-item>
       <a-descriptions-item label="创建时间">{{ dataDetail?.createTime }}</a-descriptions-item>
-      <a-descriptions-item label="修改人">{{ dataDetail?.updateUser }}</a-descriptions-item>
+<!--      <a-descriptions-item label="修改人">{{ dataDetail?.updateUser }}</a-descriptions-item>-->
       <a-descriptions-item label="修改人">{{ dataDetail?.updateUserString }}</a-descriptions-item>
       <a-descriptions-item label="更新时间">{{ dataDetail?.updateTime }}</a-descriptions-item>
     </a-descriptions>

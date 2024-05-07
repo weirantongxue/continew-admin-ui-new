@@ -7,7 +7,7 @@
         :data="dataList"
         :columns="columns"
         :loading="loading"
-        :scroll="{ x: '100%', y: '100%', minWidth: 1000 }"
+        :scroll="{ x: '200%', y: '100%', minWidth: 1000 }"
         :pagination="pagination"
         :disabledColumnKeys="['name']"
         @refresh="search"
@@ -34,8 +34,8 @@
             </a-button>
           </a-tooltip>
         </template>
-        <template #id="{ record }">
-          <a-link @click="onDetail(record)">{{ record.id }}</a-link>
+        <template #name="{ record }">
+          <a-link @click="onDetail(record)">{{ record.name }}</a-link>
         </template>
         <template #action="{ record }">
           <a-space>
@@ -76,17 +76,18 @@ import has from '@/utils/has'
 defineOptions({ name: 'AiModelScript' })
 
 const columns: TableInstanceColumns[] = [
-  { title: '主键', slotName: 'id' },
-  { title: '脚本名称', dataIndex: 'name' },
+  // { title: '主键', slotName: 'id' },
+  { title: '脚本名称', slotName: 'name' },
   { title: '模型名称', dataIndex: 'modelId' },
   { title: '预设内容', dataIndex: 'prompt' },
   { title: '封面', dataIndex: 'coverUrl' },
   { title: '组件路径', dataIndex: 'component' },
   { title: '描述', dataIndex: 'description' },
-  { title: '排序值', dataIndex: 'sort' },
-  { title: '状态（1：启用；2：禁用）', dataIndex: 'status' },
-  { title: '创建人', dataIndex: 'createUser' },
+  { title: '状态', dataIndex: 'status' },
+  { title: '创建人', dataIndex: 'createUserString' },
   { title: '创建时间', dataIndex: 'createTime' },
+  { title: '排序值', dataIndex: 'sort' },
+
   {
     title: '操作',
     slotName: 'action',

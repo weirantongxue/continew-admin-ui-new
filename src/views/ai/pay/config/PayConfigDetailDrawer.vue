@@ -5,18 +5,19 @@
       <a-descriptions-item label="支付名称">{{ dataDetail?.name }}</a-descriptions-item>
       <a-descriptions-item label="渠道图标">{{ dataDetail?.icon }}</a-descriptions-item>
       <a-descriptions-item label="支付方式: [1=余额支付, 2=微信支付, 3=支付宝支付]">{{ dataDetail?.way }}</a-descriptions-item>
-      <a-descriptions-item label="排序编号">{{ dataDetail?.sort }}</a-descriptions-item>
       <a-descriptions-item label="备注信息">{{ dataDetail?.remark }}</a-descriptions-item>
       <a-descriptions-item label="配置参数">{{ dataDetail?.params }}</a-descriptions-item>
       <a-descriptions-item label="默认支付: [0=否的, 1=是的]">{{ dataDetail?.isDefault }}</a-descriptions-item>
       <a-descriptions-item label="方式状态: [0=关闭, 1=开启]">{{ dataDetail?.status }}</a-descriptions-item>
       <a-descriptions-item label="是否删除: [0=否, 1=是]">{{ dataDetail?.isDeleted }}</a-descriptions-item>
       <a-descriptions-item label="创建时间">{{ dataDetail?.createTime }}</a-descriptions-item>
-      <a-descriptions-item label="创建人">{{ dataDetail?.createUser }}</a-descriptions-item>
+<!--      <a-descriptions-item label="创建人">{{ dataDetail?.createUser }}</a-descriptions-item>-->
       <a-descriptions-item label="创建人">{{ dataDetail?.createUserString }}</a-descriptions-item>
       <a-descriptions-item label="更新时间">{{ dataDetail?.updateTime }}</a-descriptions-item>
-      <a-descriptions-item label="修改人">{{ dataDetail?.updateUser }}</a-descriptions-item>
+<!--      <a-descriptions-item label="修改人">{{ dataDetail?.updateUser }}</a-descriptions-item>-->
       <a-descriptions-item label="修改人">{{ dataDetail?.updateUserString }}</a-descriptions-item>
+      <a-descriptions-item label="排序编号">{{ dataDetail?.sort }}</a-descriptions-item>
+
     </a-descriptions>
   </a-drawer>
 </template>

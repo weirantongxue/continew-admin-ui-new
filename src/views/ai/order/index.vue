@@ -7,7 +7,7 @@
         :data="dataList"
         :columns="columns"
         :loading="loading"
-        :scroll="{ x: '100%', y: '100%', minWidth: 1000 }"
+        :scroll="{ x: '200%', y: '100%', minWidth: 1000 }"
         :pagination="pagination"
         :disabledColumnKeys="['name']"
         @refresh="search"
@@ -84,7 +84,7 @@ const columns: TableInstanceColumns[] = [
   { title: '订单二维码连接', dataIndex: 'codeUrl' },
   { title: '部门账户信息', dataIndex: 'deptId' },
   { title: '订单状态', dataIndex: 'orderStatus' },
-  { title: '创建人', dataIndex: 'createUser' },
+  { title: '创建人', dataIndex: 'createUserString' },
   { title: '创建时间', dataIndex: 'createTime' },
   {
     title: '操作',

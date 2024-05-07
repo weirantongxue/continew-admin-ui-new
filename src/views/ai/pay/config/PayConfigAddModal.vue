@@ -50,12 +50,6 @@ const columns: Columns = [
     rules: [{ required: true, message: '请输入支付方式' }]
   },
   {
-    label: '排序编号',
-    field: 'sort',
-    type: 'input',
-    rules: [{ required: true, message: '请输入排序编号' }]
-  },
-  {
     label: '备注信息',
     field: 'remark',
     type: 'input',
@@ -77,6 +71,12 @@ const columns: Columns = [
     label: '状态',
     field: 'status',
     rules: [{ required: true, message: '请输入方式状态' }]
+  },
+  {
+    label: '排序编号',
+    field: 'sort',
+    type: 'input',
+    rules: [{ required: true, message: '请输入排序编号' }]
   },
 ]
 

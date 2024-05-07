@@ -39,8 +39,8 @@
             </a-button>
           </a-tooltip>
         </template>
-        <template #id="{ record }">
-          <a-link @click="onDetail(record)">{{ record.id }}</a-link>
+        <template #messageId="{ record }">
+          <a-link @click="onDetail(record)">{{ record.messageId }}</a-link>
         </template>
         <template #action="{ record }">
           <a-space>
@@ -78,14 +78,14 @@ import has from '@/utils/has'
 defineOptions({ name: 'AiMsg' })
 
 const columns: TableInstanceColumns[] = [
-  { title: '主键', slotName: 'id' },
-  { title: '会话id', dataIndex: 'itemId' },
-  { title: '消息id', dataIndex: 'messageId' },
-  { title: '任务id', dataIndex: 'taskId' },
-  { title: '提问', dataIndex: 'question', ellipsis: true, tooltip: true, width: 100 },
-  { title: '回答', dataIndex: 'answer', ellipsis: true, tooltip: true, width: 100 },
+  // { title: '主键', slotName: 'id' },
+  // { title: '会话id', slotName: 'itemId' },
+  { title: '消息id', slotName: 'messageId', width: 310 },
+  // { title: '任务id', dataIndex: 'taskId'},
+  { title: '提问', dataIndex: 'question', ellipsis: true, tooltip: true, width: 200 },
+  { title: '回答', dataIndex: 'answer', ellipsis: true, tooltip: true, width: 200 },
   { title: '模型名称', dataIndex: 'model' },
-  { title: '是否采纳,0:未点击.1:采纳.2,未采纳', dataIndex: 'adopt' },
+  { title: '是否采纳', dataIndex: 'adopt' },
   { title: 'ip信息', dataIndex: 'ip' },
   { title: '输入词块数', dataIndex: 'promptTokens' },
   { title: '输出词块数', dataIndex: 'completionTokens' },

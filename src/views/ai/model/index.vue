@@ -18,7 +18,7 @@
           </a-input>
           <a-input
             v-model="queryForm.modelType"
-            placeholder="请输入模型类型,1:大语言模型,2:文生图"
+            placeholder="请输入模型类型"
             allow-clear
             @change="search"
           >
@@ -29,13 +29,13 @@
           </a-input>
           <a-input
             v-model="queryForm.resType"
-            placeholder="请输入stream:流式,sync:同步,async:异步"
+            placeholder="请输入stream"
             allow-clear
             @change="search"
           >
             <template #prefix><icon-search /></template>
           </a-input>
-          <a-input v-model="queryForm.status" placeholder="请输入状态（1：启用；2：禁用）" allow-clear @change="search">
+          <a-input v-model="queryForm.status" placeholder="请输入状态" allow-clear @change="search">
             <template #prefix><icon-search /></template>
           </a-input>
           <a-button @click="reset">重置</a-button>
@@ -53,8 +53,8 @@
             </a-button>
           </a-tooltip>
         </template>
-        <template #id="{ record }">
-          <a-link @click="onDetail(record)">{{ record.id }}</a-link>
+        <template #name="{ record }">
+          <a-link @click="onDetail(record)">{{ record.name }}</a-link>
         </template>
         <template #action="{ record }">
           <a-space>
@@ -89,18 +89,18 @@ import has from '@/utils/has'
 defineOptions({ name: 'AiModel' })
 
 const columns: TableInstanceColumns[] = [
-  { title: '主键', slotName: 'id' },
-  { title: '模型名称', dataIndex: 'name' },
-  { title: '模型类型,1:大语言模型,2:文生图', dataIndex: 'modelType' },
+  // { title: '主键', slotName: 'id' },
+  { title: '模型名称', slotName: 'name' },
+  { title: '模型类型', dataIndex: 'modelType' },
   { title: '模型图标', dataIndex: 'coverUrl' },
   { title: '模型地址', dataIndex: 'url' },
   { title: 'apikey', dataIndex: 'apiKey' },
   { title: '回调地址', dataIndex: 'callBack' },
-  { title: 'stream:流式,sync:同步,async:异步', dataIndex: 'resType' },
+  { title: 'stream', dataIndex: 'resType' },
   { title: '描述', dataIndex: 'introduction' },
   { title: '排序值', dataIndex: 'sort' },
-  { title: '状态（1：启用；2：禁用）', dataIndex: 'status' },
-  { title: '创建人', dataIndex: 'createUser' },
+  { title: '状态', dataIndex: 'status' },
+  { title: '创建人', dataIndex: 'createUserString' },
   { title: '创建时间', dataIndex: 'createTime' },
   {
     title: '操作',

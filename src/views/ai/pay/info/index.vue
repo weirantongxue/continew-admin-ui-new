@@ -7,7 +7,7 @@
         :data="dataList"
         :columns="columns"
         :loading="loading"
-        :scroll="{ x: '100%', y: '100%', minWidth: 1000 }"
+        :scroll="{ x: '200%', y: '100%', minWidth: 1000 }"
         :pagination="pagination"
         :disabledColumnKeys="['name']"
         @refresh="search"
@@ -85,7 +85,7 @@ const columns: TableInstanceColumns[] = [
   { title: '交易类型', dataIndex: 'tradeType' },
   { title: '交易状态', dataIndex: 'tradeState' },
   { title: '支付金额(元)', dataIndex: 'payerTotal' },
-  { title: '通知参数', dataIndex: 'content' },
+  // { title: '通知参数', dataIndex: 'content' },
   { title: '创建时间', dataIndex: 'createTime' },
   { title: '更新时间', dataIndex: 'updateTime' },
   {

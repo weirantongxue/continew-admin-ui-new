@@ -1,25 +1,65 @@
 <template>
-  <a-drawer v-model:visible="visible" title="AI模型详情" :width="width >= 580 ? 580 : '100%'" :footer="false">
-    <a-descriptions :column="2" size="large" class="general-description">
+  <a-drawer v-model:visible="visible" title="AI模型详情" :width="720" :footer="false">
+    <a-descriptions title="基本信息" :column="2" size="large" class="general-description">
       <a-descriptions-item label="主键">{{ dataDetail?.id }}</a-descriptions-item>
       <a-descriptions-item label="模型名称">{{ dataDetail?.name }}</a-descriptions-item>
-      <a-descriptions-item label="模型类型,1:大语言模型,2:文生图">{{ dataDetail?.modelType }}</a-descriptions-item>
+      <a-descriptions-item label="模型类型">{{ dataDetail?.modelType }}</a-descriptions-item>
       <a-descriptions-item label="模型图标">{{ dataDetail?.coverUrl }}</a-descriptions-item>
-      <a-descriptions-item label="模型地址">{{ dataDetail?.url }}</a-descriptions-item>
-      <a-descriptions-item label="apikey">{{ dataDetail?.apiKey }}</a-descriptions-item>
-      <a-descriptions-item label="回调地址">{{ dataDetail?.callBack }}</a-descriptions-item>
-      <a-descriptions-item label="stream:流式,sync:同步,async:异步">{{ dataDetail?.resType }}</a-descriptions-item>
+      <a-descriptions-item label="stream">{{ dataDetail?.resType }}</a-descriptions-item>
       <a-descriptions-item label="描述">{{ dataDetail?.introduction }}</a-descriptions-item>
       <a-descriptions-item label="排序值">{{ dataDetail?.sort }}</a-descriptions-item>
-      <a-descriptions-item label="状态（1：启用；2：禁用）">{{ dataDetail?.status }}</a-descriptions-item>
-      <a-descriptions-item label="是否删除: 0=否, 1=是">{{ dataDetail?.isDelete }}</a-descriptions-item>
-      <a-descriptions-item label="创建人">{{ dataDetail?.createUser }}</a-descriptions-item>
+      <a-descriptions-item label="状态">{{ dataDetail?.status }}</a-descriptions-item>
+<!--      <a-descriptions-item label="创建人">{{ dataDetail?.createUser }}</a-descriptions-item>-->
       <a-descriptions-item label="创建人">{{ dataDetail?.createUserString }}</a-descriptions-item>
       <a-descriptions-item label="创建时间">{{ dataDetail?.createTime }}</a-descriptions-item>
-      <a-descriptions-item label="修改人">{{ dataDetail?.updateUser }}</a-descriptions-item>
+<!--      <a-descriptions-item label="修改人">{{ dataDetail?.updateUser }}</a-descriptions-item>-->
       <a-descriptions-item label="修改人">{{ dataDetail?.updateUserString }}</a-descriptions-item>
       <a-descriptions-item label="修改时间">{{ dataDetail?.updateTime }}</a-descriptions-item>
     </a-descriptions>
+
+    <a-descriptions
+      title="模型地址"
+      :column="2"
+      size="large"
+      class="general-description http"
+      style="margin-top: 20px; position: relative"
+
+    >
+      <a-descriptions-item :span="2">
+        <a-typography-paragraph copyable type="primary">
+          {{ dataDetail?.url }}
+        </a-typography-paragraph>
+      </a-descriptions-item>
+    </a-descriptions>
+
+    <a-descriptions
+      title="apiKey"
+      :column="2"
+      size="large"
+      class="general-description http"
+      style="margin-top: 20px; position: relative"
+    >
+      <a-descriptions-item :span="2">
+        <a-typography-paragraph copyable type="primary">
+          {{ dataDetail?.apiKey }}
+        </a-typography-paragraph>
+      </a-descriptions-item>
+    </a-descriptions>
+
+    <a-descriptions
+      title="回调地址"
+      :column="2"
+      size="large"
+      class="general-description http"
+      style="margin-top: 20px; position: relative"
+    >
+      <a-descriptions-item :span="2">
+        <a-typography-paragraph copyable type="primary">
+          {{ dataDetail?.callBack }}
+        </a-typography-paragraph>
+      </a-descriptions-item>
+    </a-descriptions>
+
   </a-drawer>
 </template>
 
