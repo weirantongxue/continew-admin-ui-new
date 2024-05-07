@@ -7,7 +7,7 @@
         :data="dataList"
         :columns="columns"
         :loading="loading"
-        :scroll="{ x: '100%', y: '100%', minWidth: 1000 }"
+        :scroll="{ x: '200%', y: '100%', minWidth: 1000 }"
         :pagination="pagination"
         :disabledColumnKeys="['name']"
         @refresh="search"
@@ -82,8 +82,8 @@ const columns: TableInstanceColumns[] = [
   { title: '会话id', dataIndex: 'itemId' },
   { title: '消息id', dataIndex: 'messageId' },
   { title: '任务id', dataIndex: 'taskId' },
-  { title: '提问', dataIndex: 'question' },
-  { title: '回答', dataIndex: 'answer' },
+  { title: '提问', dataIndex: 'question', ellipsis: true, tooltip: true, width: 100 },
+  { title: '回答', dataIndex: 'answer', ellipsis: true, tooltip: true, width: 100 },
   { title: '模型名称', dataIndex: 'model' },
   { title: '是否采纳,0:未点击.1:采纳.2,未采纳', dataIndex: 'adopt' },
   { title: 'ip信息', dataIndex: 'ip' },
@@ -93,7 +93,7 @@ const columns: TableInstanceColumns[] = [
   { title: '总请求耗时', dataIndex: 'responseTime' },
   { title: '聊天耗时', dataIndex: 'chatResponseTime' },
   { title: '创建时间', dataIndex: 'createTime' },
-  { title: '创建人', dataIndex: 'createUser' },
+  { title: '创建人', dataIndex: 'createUserString' },
   {
     title: '操作',
     slotName: 'action',

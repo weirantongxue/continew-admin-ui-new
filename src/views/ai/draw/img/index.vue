@@ -63,12 +63,11 @@ import has from '@/utils/has'
 defineOptions({ name: 'AiDrawImg' })
 
 const columns: TableInstanceColumns[] = [
-  { title: '主键', dataIndex: 'id' },
+  // { title: '主键', dataIndex: 'id' },
   { title: '任务id', dataIndex: 'taskId' },
   { title: '图片地址', dataIndex: 'imageUrl' },
-  { title: '是否删除: [0=否, 1=是]', dataIndex: 'isDeleted' },
   { title: '创建时间', dataIndex: 'createTime' },
-  { title: '创建人', dataIndex: 'createUser' },
+  { title: '创建人', dataIndex: 'createUserString' },
   {
     title: '操作',
     slotName: 'action',

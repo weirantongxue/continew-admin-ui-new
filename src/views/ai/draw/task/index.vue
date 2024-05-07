@@ -30,8 +30,8 @@
             </a-button>
           </a-tooltip>
         </template>
-        <template #name="{ record }">
-          <a-link @click="onDetail(record)">{{ record.name }}</a-link>
+        <template #taskId="{ record }">
+          <a-link @click="onDetail(record)">{{ record.id }}</a-link>
         </template>
         <template #action="{ record }">
           <a-space>
@@ -63,14 +63,14 @@ import has from '@/utils/has'
 defineOptions({ name: 'AiDrawTask' })
 
 const columns: TableInstanceColumns[] = [
-  { title: '主键', dataIndex: 'id' },
-  { title: '任务id', dataIndex: 'taskId' },
-  { title: '问题', dataIndex: 'prompt' },
-  { title: '拼接图', dataIndex: 'mosaicImg' },
-  { title: '传递id', dataIndex: 'nonce' },
-  { title: '任务状态success', dataIndex: 'state' },
-  { title: '创建时间', dataIndex: 'createTime' },
-  { title: '创建人', dataIndex: 'createUser' },
+  // { title: '主键', dataIndex: 'id' },
+  { title: '任务id', slotName: 'taskId', width: 80 },
+  { title: '问题', dataIndex: 'prompt', ellipsis: true, tooltip: true, width: 200 },
+  // { title: '拼接图', dataIndex: 'mosaicImg' },
+  // { title: '传递id', dataIndex: 'nonce' },
+  { title: '任务状态', dataIndex: 'state', width: 35 },
+  { title: '创建时间', dataIndex: 'createTime', width: 60 },
+  { title: '创建人', dataIndex: 'createUserString', width: 30 },
   {
     title: '操作',
     slotName: 'action',
