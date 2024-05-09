@@ -31,7 +31,9 @@
     </a-form-item>
     <a-form-item>
       <a-space direction="vertical" fill class="w-full">
-        <a-button class="btn" type="primary" :loading="loading" html-type="submit" size="large" long>立即登录</a-button>
+        <a-button class="btn" type="primary" :loading="loading" html-type="submit" size="large" long
+          >立即登录
+        </a-button>
       </a-space>
     </a-form-item>
   </a-form>
@@ -39,7 +41,7 @@
 
 <script setup lang="ts">
 import { getImageCaptcha } from '@/apis'
-import { Message, type FormInstance } from '@arco-design/web-vue'
+import { Message, type FormInstance, Modal } from '@arco-design/web-vue'
 import { useUserStore } from '@/stores'
 import { useStorage } from '@vueuse/core'
 import { encryptByRsa } from '@/utils/encrypt'
@@ -151,6 +153,7 @@ onMounted(() => {
   background-color: rgb(var(--danger-1));
   border-color: rgb(var(--danger-3));
 }
+
 .arco-input-wrapper.arco-input-error:hover {
   background-color: rgb(var(--danger-1));
   border-color: rgb(var(--danger-6));
@@ -160,6 +163,7 @@ onMounted(() => {
   font-size: 13px;
   color: var(--color-text-1);
 }
+
 .arco-input-wrapper:hover {
   border-color: rgb(var(--arcoblue-6));
 }

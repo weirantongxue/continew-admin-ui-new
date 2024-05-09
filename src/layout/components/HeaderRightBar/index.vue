@@ -28,8 +28,8 @@
       <a-tooltip v-if="!isMobile()" content="全屏切换" position="bottom">
         <a-button size="mini" class="gi_hover_btn" @click="toggle">
           <template #icon>
-            <icon-fullscreen :size="18" v-if="!isFullscreen" />
-            <icon-fullscreen-exit :size="18" v-else />
+            <icon-fullscreen v-if="!isFullscreen" :size="18" />
+            <icon-fullscreen-exit v-else :size="18" />
           </template>
         </a-button>
       </a-tooltip>
@@ -52,9 +52,6 @@
         <template #content>
           <a-doption @click="router.push('/setting/profile')">
             <span>账号管理</span>
-          </a-doption>
-          <a-doption @click="router.push('/setting/security')">
-            <span>安全设置</span>
           </a-doption>
           <a-divider :margin="0" />
           <a-doption @click="logout">
@@ -101,6 +98,32 @@ const logout = () => {
     }
   })
 }
+onMounted(() => {
+  checkPasswordExpired()
+})
+const checkPasswordExpired = () => {
+  if (!userStore.passwordExpiredShow || !userStore.userInfo.passwordExpired) {
+    return
+  }
+  Modal.confirm({
+    title: '提示',
+    content: '密码已过期，是否去修改？',
+    hideCancel: false,
+    closable: true,
+    onBeforeOk: async () => {
+      try {
+        await router.push({ path: '/setting/profile' })
+        return true
+      } catch (error) {
+        return false
+      }
+    },
+    onCancel: () => {
+      // 当前登录会话不再提示
+      userStore.passwordExpiredShow = false
+    }
+  })
+}
 </script>
 
 <style lang="scss" scoped>
@@ -111,10 +134,12 @@ const logout = () => {
 .user {
   cursor: pointer;
   color: var(--color-text-1);
+
   .username {
     margin-left: 10px;
     white-space: nowrap;
   }
+
   .arco-icon-down {
     transition: all 0.3s;
     margin-left: 2px;
