@@ -47,9 +47,6 @@
             </a-button>
           </a-tooltip>
         </template>
-        <!-- <template #name="{ record }">
-          <a-link @click="onDetail(record)">{{ record.name }}</a-link>
-        </template> -->
         <template #action="{ record }">
           <a-space>
             <a-link
@@ -83,10 +80,10 @@ import has from '@/utils/has'
 defineOptions({ name: 'DeptAccountLog' })
 
 const columns: TableInstanceColumns[] = [
-  { title: '主键', dataIndex: 'id' },
+  // { title: '主键', dataIndex: 'id' },
   { title: '部门账户信息', dataIndex: 'deptId' },
   { title: '消息id', dataIndex: 'messageId' },
-  { title: '模型类型,1:大语言模型,2:文生图', dataIndex: 'modelType' },
+  { title: '模型类型', dataIndex: 'modelType' },
   { title: '消耗代币', dataIndex: 'token' },
   { title: '创建时间', dataIndex: 'createTime' },
   { title: '创建人', dataIndex: 'createUser' },
@@ -96,7 +93,7 @@ const columns: TableInstanceColumns[] = [
     width: 130,
     align: 'center',
     fixed: !isMobile() ? 'right' : undefined,
-    show: has.hasPermOr(['ai:deptAccountLog:update', 'ai:deptAccountLog:delete'])
+    show: has.hasPermOr(['ai:deptAccountLog:delete'])
   }
 ]
 
