@@ -1,19 +1,19 @@
 import { defineStore } from 'pinia'
-import { ref, reactive, computed } from 'vue'
+import { computed, reactive, ref } from 'vue'
 import { resetRouter } from '@/router'
 import {
-  accountLogin as accountLoginApi,
-  phoneLogin as phoneLoginApi,
-  emailLogin as emailLoginApi,
-  socialLogin as socialLoginApi,
-  logout as logoutApi,
-  getUserInfo as getUserInfoApi,
   type AccountLoginReq,
-  type PhoneLoginReq,
   type EmailLoginReq,
-  type UserInfo
+  type PhoneLoginReq,
+  type UserInfo,
+  accountLogin as accountLoginApi,
+  emailLogin as emailLoginApi,
+  getUserInfo as getUserInfoApi,
+  logout as logoutApi,
+  phoneLogin as phoneLoginApi,
+  socialLogin as socialLoginApi
 } from '@/apis'
-import { setToken, clearToken, getToken } from '@/utils/auth'
+import { clearToken, getToken, setToken } from '@/utils/auth'
 import { resetHasRouteFlag } from '@/router/permission'
 import getAvatar from '@/utils/avatar'
 
@@ -27,7 +27,7 @@ const storeSetup = () => {
     phone: '',
     avatar: '',
     pwdResetTime: '',
-    passwordExpired: false,
+    pwdExpired: false,
     registrationDate: '',
     deptName: '',
     roles: [],
@@ -37,7 +37,7 @@ const storeSetup = () => {
   const avatar = computed(() => userInfo.avatar)
 
   const token = ref(getToken() || '')
-  const passwordExpiredShow = ref<boolean>(true)
+  const pwdExpiredShow = ref<boolean>(true)
   const roles = ref<string[]>([]) // 当前用户角色
   const permissions = ref<string[]>([]) // 当前角色权限标识集合
 
@@ -76,6 +76,15 @@ const storeSetup = () => {
     token.value = res.data.token
   }
 
+  // 退出登录回调
+  const logoutCallBack = async () => {
+    roles.value = []
+    permissions.value = []
+    pwdExpiredShow.value = true
+    resetToken()
+    resetRouter()
+  }
+
   // 退出登录
   const logout = async () => {
     try {
@@ -85,15 +94,6 @@ const storeSetup = () => {
     } catch (error) {
       return false
     }
-  }
-
-  // 退出登录回调
-  const logoutCallBack = async () => {
-    roles.value = []
-    permissions.value = []
-    passwordExpiredShow.value = true
-    resetToken()
-    resetRouter()
   }
 
   // 获取用户信息
@@ -114,7 +114,7 @@ const storeSetup = () => {
     token,
     roles,
     permissions,
-    passwordExpiredShow,
+    pwdExpiredShow,
     accountLogin,
     emailLogin,
     phoneLogin,
@@ -127,5 +127,5 @@ const storeSetup = () => {
 }
 
 export const useUserStore = defineStore('user', storeSetup, {
-  persist: { paths: ['token', 'roles', 'permissions', 'passwordExpiredShow'], storage: localStorage }
+  persist: { paths: ['token', 'roles', 'permissions', 'pwdExpiredShow'], storage: localStorage }
 })

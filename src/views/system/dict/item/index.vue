@@ -1,7 +1,7 @@
 <template>
   <a-modal
     v-model:visible="visible"
-    :title="'字典项管理(' + dictCode + ')'"
+    :title="`字典项管理(${dictCode})`"
     title-align="start"
     :mask-closable="false"
     :esc-to-close="false"
@@ -11,28 +11,27 @@
     hide-cancel
   >
     <GiTable
-      ref="tableRef"
       row-key="id"
       :data="dataList"
       :columns="columns"
       :loading="loading"
       :scroll="{ x: '100%', y: '100%', minWidth: 800 }"
       :pagination="pagination"
-      :disabledTools="['size']"
-      :disabledColumnKeys="['label']"
+      :disabled-tools="['size']"
+      :disabled-column-keys="['label']"
       @refresh="search"
     >
       <template #custom-left>
-        <a-button type="primary" @click="onAdd">
-          <template #icon><icon-plus /></template>
-          <span>新增</span>
-        </a-button>
-      </template>
-      <template #custom-right>
         <a-input v-model="queryForm.description" placeholder="请输入关键词" allow-clear @change="search">
           <template #prefix><icon-search /></template>
         </a-input>
         <a-button @click="reset">重置</a-button>
+      </template>
+      <template #custom-right>
+        <a-button v-permission="['system:dict:item:add']" type="primary" @click="onAdd">
+          <template #icon><icon-plus /></template>
+          <span>新增</span>
+        </a-button>
       </template>
       <template #label="{ record }">
         <a-tag :color="record.color">{{ record.label }}</a-tag>
@@ -42,17 +41,14 @@
       </template>
       <template #action="{ record }">
         <a-space>
-          <template #split>
-            <a-divider direction="vertical" :margin="0" />
-          </template>
-          <a-link @click="onUpdate(record)">修改</a-link>
+          <a-link v-permission="['system:dict:item:update']" @click="onUpdate(record)">修改</a-link>
           <a-popconfirm
             type="warning"
             content="是否确定删除该条数据？"
             :ok-button-props="{ status: 'danger' }"
             @ok="onDelete(record)"
           >
-            <a-link status="danger">删除</a-link>
+            <a-link v-permission="['system:dict:item:delete']" status="danger">删除</a-link>
           </a-popconfirm>
         </a-space>
       </template>
@@ -63,14 +59,29 @@
 </template>
 
 <script lang="ts" setup>
-import { listDictItem, deleteDictItem, type DictItemResp, type DictItemQuery } from '@/apis'
+import { useWindowSize } from '@vueuse/core'
 import DictItemAddModal from './DictItemAddModal.vue'
+import { type DictItemQuery, type DictItemResp, deleteDictItem, listDictItem } from '@/apis'
 import type { TableInstanceColumns } from '@/components/GiTable/type'
 import { useTable } from '@/hooks'
 import { isMobile } from '@/utils'
-import { useWindowSize } from '@vueuse/core'
+import has from '@/utils/has'
 
 const { width } = useWindowSize()
+
+const queryForm = reactive<DictItemQuery>({
+  dictId: '',
+  sort: ['createTime,desc']
+})
+
+const {
+  tableData: dataList,
+  loading,
+  pagination,
+  search,
+  handleDelete
+} = useTable((p) => listDictItem({ ...queryForm, page: p.page, size: p.size }), { immediate: true })
+
 const columns: TableInstanceColumns[] = [
   {
     title: '序号',
@@ -96,35 +107,15 @@ const columns: TableInstanceColumns[] = [
   { title: '创建时间', dataIndex: 'createTime', width: 180 },
   { title: '修改人', dataIndex: 'updateUserString', ellipsis: true, tooltip: true, show: false },
   { title: '修改时间', dataIndex: 'updateTime', width: 180, show: false },
-  { title: '操作', slotName: 'action', width: 130, align: 'center', fixed: !isMobile() ? 'right' : undefined }
+  {
+    title: '操作',
+    slotName: 'action',
+    width: 130,
+    align: 'center',
+    fixed: !isMobile() ? 'right' : undefined,
+    show: has.hasPermOr(['system:dict:item:update', 'system:dict:item:delete'])
+  }
 ]
-
-const queryForm = reactive<DictItemQuery>({
-  sort: ['createTime,desc']
-})
-
-const dictId = ref('')
-const dictCode = ref('')
-const visible = ref(false)
-// 打开
-const open = (id: string, code: string) => {
-  dataList.value = []
-  dictId.value = id
-  dictCode.value = code
-  visible.value = true
-  search()
-}
-defineExpose({ open })
-
-const {
-  tableData: dataList,
-  loading,
-  pagination,
-  search,
-  handleDelete
-} = useTable((p) => listDictItem({ ...queryForm, dictId: dictId.value, page: p.page, size: p.size }), {
-  immediate: true
-})
 
 // 重置
 const reset = () => {
@@ -132,6 +123,18 @@ const reset = () => {
   queryForm.status = undefined
   search()
 }
+
+const dictCode = ref('')
+const visible = ref(false)
+// 打开
+const open = (id: string, code: string) => {
+  dataList.value = []
+  queryForm.dictId = id
+  dictCode.value = code
+  visible.value = true
+  search()
+}
+defineExpose({ open })
 
 // 删除
 const onDelete = (item: DictItemResp) => {
@@ -141,7 +144,7 @@ const onDelete = (item: DictItemResp) => {
 const DictItemAddModalRef = ref<InstanceType<typeof DictItemAddModal>>()
 // 新增
 const onAdd = () => {
-  DictItemAddModalRef.value?.onAdd(dictId.value)
+  DictItemAddModalRef.value?.onAdd(queryForm.dictId)
 }
 
 // 修改

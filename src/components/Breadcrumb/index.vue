@@ -4,8 +4,9 @@
       <span
         v-if="item.redirect === 'noRedirect' || item.redirect === '' || index === breadcrumbList.length - 1"
         class="gi_line_1"
-        >{{ item.meta.title }}</span
       >
+        {{ item.meta.title }}
+      </span>
       <span v-else class="gi_line_1 breadcrumb-item-title" @click="handleLink(item)">{{ item.meta.title }}</span>
     </a-breadcrumb-item>
   </a-breadcrumb>
@@ -13,8 +14,8 @@
 
 <script lang="ts" setup>
 import type { RouteLocationMatched } from 'vue-router'
-import { useRouteStore } from '@/stores'
 import { findTree } from 'xe-utils'
+import { useRouteStore } from '@/stores'
 
 const route = useRoute()
 const router = useRouter()

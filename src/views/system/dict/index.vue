@@ -8,21 +8,21 @@
         :loading="loading"
         :scroll="{ x: '100%', y: '100%', minWidth: 1000 }"
         :pagination="pagination"
-        :disabledTools="['size']"
-        :disabledColumnKeys="['name']"
+        :disabled-tools="['size']"
+        :disabled-column-keys="['name']"
         @refresh="search"
       >
         <template #custom-left>
-          <a-button v-permission="['system:dict:add']" type="primary" @click="onAdd">
-            <template #icon><icon-plus /></template>
-            <span>新增</span>
-          </a-button>
-        </template>
-        <template #custom-right>
           <a-input v-model="queryForm.description" placeholder="请输入关键词" allow-clear @change="search">
             <template #prefix><icon-search /></template>
           </a-input>
           <a-button @click="reset">重置</a-button>
+        </template>
+        <template #custom-right>
+          <a-button v-permission="['system:dict:add']" type="primary" @click="onAdd">
+            <template #icon><icon-plus /></template>
+            <span>新增</span>
+          </a-button>
         </template>
         <template #isSystem="{ record }">
           <a-tag v-if="record.isSystem" color="red">是</a-tag>
@@ -52,8 +52,8 @@
 </template>
 
 <script setup lang="ts">
-import { listDict, deleteDict, type DictResp, type DictQuery } from '@/apis'
 import DictAddModal from './DictAddModal.vue'
+import { type DictQuery, type DictResp, deleteDict, listDict } from '@/apis'
 import DictItemModal from '@/views/system/dict/item/index.vue'
 import type { TableInstanceColumns } from '@/components/GiTable/type'
 import { useTable } from '@/hooks'
@@ -61,6 +61,18 @@ import { isMobile } from '@/utils'
 import has from '@/utils/has'
 
 defineOptions({ name: 'SystemDict' })
+
+const queryForm = reactive<DictQuery>({
+  sort: ['createTime,desc']
+})
+
+const {
+  tableData: dataList,
+  loading,
+  pagination,
+  search,
+  handleDelete
+} = useTable((p) => listDict({ ...queryForm, page: p.page, size: p.size }), { immediate: true })
 
 const columns: TableInstanceColumns[] = [
   {
@@ -86,18 +98,6 @@ const columns: TableInstanceColumns[] = [
     show: has.hasPermOr(['system:dict:update', 'system:dict:delete'])
   }
 ]
-
-const queryForm = reactive<DictQuery>({
-  sort: ['createTime,desc']
-})
-
-const {
-  tableData: dataList,
-  loading,
-  pagination,
-  search,
-  handleDelete
-} = useTable((p) => listDict({ ...queryForm, page: p.page, size: p.size }), { immediate: true })
 
 // 重置
 const reset = () => {

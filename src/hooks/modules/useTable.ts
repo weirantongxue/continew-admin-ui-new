@@ -1,5 +1,5 @@
-import type { TableInstance, TableData } from '@arco-design/web-vue'
-import { Modal, Message } from '@arco-design/web-vue'
+import type { TableData, TableInstance } from '@arco-design/web-vue'
+import { Message, Modal } from '@arco-design/web-vue'
 import { usePagination } from '@/hooks'
 
 interface Options<T> {
@@ -9,8 +9,8 @@ interface Options<T> {
   rowKey?: keyof T
 }
 
-type PaginationParams = { page: number; size: number }
-type Api<T> = (params: PaginationParams) => Promise<ApiRes<PageRes<T[]>>>
+type PaginationParams = { page: number, size: number }
+type Api<T> = (params: PaginationParams) => Promise<ApiRes<PageRes<T[]>>> | Promise<ApiRes<T[]>>
 
 export function useTable<T>(api: Api<T>, options?: Options<T>) {
   const { formatResult, onSuccess, immediate, rowKey } = options || {}
@@ -18,27 +18,23 @@ export function useTable<T>(api: Api<T>, options?: Options<T>) {
   const loading = ref(false)
   const tableData = ref<T[]>([])
 
-  const getTableData = async () => {
+  async function getTableData() {
     try {
       loading.value = true
       const res = await api({ page: pagination.current, size: pagination.pageSize })
-      tableData.value = formatResult ? formatResult(res.data.list) : res.data.list
-      setTotal(res.data.total)
+      const data = !Array.isArray(res.data) ? res.data.list : res.data
+      tableData.value = formatResult ? formatResult(data) : data
+      const total = !Array.isArray(res.data) ? res.data.total : data.length
+      setTotal(total)
       onSuccess && onSuccess()
     } finally {
       loading.value = false
     }
   }
 
-  // 是否立即出发
+  // 是否立即触发
   const isImmediate = immediate ?? true
   isImmediate && getTableData()
-
-  // 查询
-  const search = () => {
-    selectedKeys.value = []
-    pagination.onChange(1)
-  }
 
   // 多选
   const selectedKeys = ref<(string | number)[]>([])
@@ -53,10 +49,16 @@ export function useTable<T>(api: Api<T>, options?: Options<T>) {
     selectedKeys.value = checked ? arr.map((i) => i[key as string]) : []
   }
 
+  // 查询
+  const search = () => {
+    selectedKeys.value = []
+    pagination.onChange(1)
+  }
+
   // 删除
   const handleDelete = async <T>(
     deleteApi: () => Promise<ApiRes<T>>,
-    options?: { title?: string; content?: string; successTip?: string; showModal?: boolean }
+    options?: { title?: string, content?: string, successTip?: string, showModal?: boolean }
   ): Promise<boolean | undefined> => {
     const onDelete = async () => {
       try {
@@ -66,9 +68,9 @@ export function useTable<T>(api: Api<T>, options?: Options<T>) {
           selectedKeys.value = []
           getTableData()
         }
-        return true
+        return res.success
       } catch (error) {
-        return true
+        return false
       }
     }
     const flag = options?.showModal ?? true // 是否显示对话框

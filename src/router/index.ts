@@ -1,4 +1,4 @@
-import { createRouter, createWebHashHistory, type RouteRecordRaw } from 'vue-router'
+import { type RouteRecordRaw, createRouter, createWebHashHistory } from 'vue-router'
 
 /** 默认布局 */
 const Layout = () => import('@/layout/index.vue')
@@ -61,7 +61,7 @@ export const constantRoutes: RouteRecordRaw[] = [
         path: '/setting/profile',
         name: 'SettingProfile',
         component: () => import('@/views/setting/profile/index.vue'),
-        meta: { title: '账号管理', showInTabs: false }
+        meta: { title: '个人中心', showInTabs: false }
       }
     ]
   }
