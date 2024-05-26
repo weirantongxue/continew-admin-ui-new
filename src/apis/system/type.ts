@@ -16,12 +16,12 @@ export interface UserResp {
   updateTime: string
   deptId: string
   deptName: string
+  roleIds: Array<number>
+  roleNames: Array<string>
   disabled: boolean
 }
 
 export type UserDetailResp = UserResp & {
-  roleIds?: Array<number>
-  roleNames: string
   pwdResetTime?: string
 }
 
@@ -146,9 +146,6 @@ export interface DictQuery {
   sort: Array<string>
 }
 
-export interface DictPageQuery extends DictQuery, PageQuery {
-}
-
 export type DictItemResp = {
   id: string
   label: string
@@ -209,6 +206,7 @@ export type FileItem = {
   extension: string
   type: number
   storageId: string
+  storageName: string
   createUserString: string
   createTime: string
   updateUserString: string
@@ -276,25 +274,60 @@ export interface OptionQuery {
 }
 
 /** 基础配置类型 */
-export interface BasicConfigResp {
-  site_favicon: string
-  site_logo: string
-  site_title: string
-  site_copyright: string
+export interface BasicConfig {
+  SITE_FAVICON: string
+  SITE_LOGO: string
+  SITE_TITLE: string
+  SITE_COPYRIGHT: string
+}
+
+/** 邮箱配置类型 */
+export interface MailConfig {
+  MAIL_SEND_TYPE: string
+  MAIL_SMTP_SERVER: string
+  MAIL_SMTP_PORT: string
+  MAIL_SMTP_USERNAME: string
+  MAIL_SMTP_PASSWORD: string
+  MAIL_SMTP_VERIFY_TYPE: string
+  MAIL_FROM: string
 }
 
 /** 安全配置类型 */
-export interface SecurityConfigResp {
-  password_contain_name: OptionResp
-  password_error_count: OptionResp
-  password_lock_minutes: OptionResp
-  password_min_length: OptionResp
-  password_special_char: OptionResp
-  password_update_interval: OptionResp
+export interface SecurityConfig {
+  PASSWORD_ERROR_LOCK_COUNT: OptionResp
+  PASSWORD_ERROR_LOCK_MINUTES: OptionResp
+  PASSWORD_EXPIRATION_DAYS: OptionResp
+  PASSWORD_EXPIRATION_WARNING_DAYS: OptionResp
+  PASSWORD_REUSE_POLICY: OptionResp
+  PASSWORD_MIN_LENGTH: OptionResp
+  PASSWORD_ALLOW_CONTAIN_USERNAME: OptionResp
+  PASSWORD_CONTAIN_SPECIAL_CHARACTERS: OptionResp
 }
 
 /** 绑定三方账号信息 */
 export interface BindSocialAccountRes {
   source: string
   description: string
+}
+
+/** 系统消息类型 */
+export interface MessageResp {
+  id: string
+  title: string
+  content: string
+  type: number
+  isRead: boolean
+  readTime?: string
+  createUserString?: string
+  createTime: string
+}
+
+export interface MessageQuery {
+  title?: string
+  type?: number
+  isRead?: boolean
+  sort: Array<string>
+}
+
+export interface MessagePageQuery extends MessageQuery, PageQuery {
 }

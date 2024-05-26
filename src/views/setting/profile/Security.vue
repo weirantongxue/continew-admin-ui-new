@@ -37,7 +37,6 @@
 <script lang="ts" setup>
 import type { ModeItem } from '../type'
 import VerifyModel from '../components/VerifyModel.vue'
-import { type OptionResp, type SecurityConfigResp, listOption } from '@/apis'
 import { useUserStore } from '@/stores'
 
 const userStore = useUserStore()
@@ -48,8 +47,8 @@ modeList.value = [
   {
     title: '安全手机',
     icon: 'phone-color',
-    value: `${`${userInfo.value.phone} ` || '手机号'}`,
-    subtitle: `可用于登录、身份验证、密码找回、通知接收`,
+    value: userInfo.value.phone,
+    subtitle: `${userInfo.value.phone ? '' : '手机号'}可用于登录、身份验证、密码找回、通知接收`,
     type: 'phone',
     jumpMode: 'modal',
     status: !!userInfo.value.phone,
@@ -58,8 +57,8 @@ modeList.value = [
   {
     title: '安全邮箱',
     icon: 'email-color',
-    value: `${`${userInfo.value.email} ` || '邮箱'}`,
-    subtitle: `可用于登录、身份验证、密码找回、通知接收`,
+    value: userInfo.value.email,
+    subtitle: `${userInfo.value.email ? '' : '邮箱'}可用于登录、身份验证、密码找回、通知接收`,
     type: 'email',
     jumpMode: 'modal',
     status: !!userInfo.value.email,
@@ -81,29 +80,6 @@ const verifyModelRef = ref<InstanceType<typeof VerifyModel>>()
 const onUpdate = (type: string) => {
   verifyModelRef.value?.open(type)
 }
-
-const securityConfig = ref<SecurityConfigResp>({
-  password_contain_name: {},
-  password_error_count: {},
-  password_expiration_days: {},
-  password_lock_minutes: {},
-  password_min_length: {},
-  password_special_char: {},
-  password_update_interval: {}
-})
-
-// 查询列表数据
-const getDataList = async () => {
-  const { data } = await listOption({ code: Object.keys(securityConfig.value) })
-  securityConfig.value = data.reduce((obj: SecurityConfigResp, option: OptionResp) => {
-    obj[option.code] = { ...option, value: Number.parseInt(option.value) }
-    return obj
-  }, {})
-}
-
-onMounted(() => {
-  getDataList()
-})
 </script>
 
 <style lang="scss" scoped></style>

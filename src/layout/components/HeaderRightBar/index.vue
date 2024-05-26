@@ -11,8 +11,13 @@
       </a-tooltip>
 
       <!-- 消息通知 -->
-      <a-popover position="bottom" trigger="click">
-        <a-badge :count="9" dot>
+      <a-popover
+        position="bottom"
+        trigger="click"
+        :content-style="{ marginTop: '-5px', padding: 0, border: 'none' }"
+        :arrow-style="{ width: 0, height: 0 }"
+      >
+        <a-badge :count="unreadMessageCount" dot>
           <a-button size="mini" class="gi_hover_btn">
             <template #icon>
               <icon-notification :size="18" />
@@ -20,7 +25,7 @@
           </a-button>
         </a-badge>
         <template #content>
-          <Message></Message>
+          <Message @readall-success="getMessageCount" />
         </template>
       </a-popover>
 
@@ -68,12 +73,54 @@
 <script setup lang="ts">
 import { Modal } from '@arco-design/web-vue'
 import { useFullscreen } from '@vueuse/core'
-import SettingDrawer from './SettingDrawer.vue'
+import { onMounted, ref } from 'vue'
 import Message from './Message.vue'
+import SettingDrawer from './SettingDrawer.vue'
+import { getUnreadMessageCount } from '@/apis'
 import { useUserStore } from '@/stores'
 import { isMobile } from '@/utils'
+import { getToken } from '@/utils/auth'
 
 defineOptions({ name: 'HeaderRight' })
+
+let socket: WebSocket
+onBeforeUnmount(() => {
+  if (socket) {
+    socket.close()
+  }
+})
+
+const unreadMessageCount = ref(0)
+// 初始化 WebSocket
+const initWebSocket = (token: string) => {
+  socket = new WebSocket(`${import.meta.env.VITE_API_WS_URL}/ws?token=${token}`)
+  socket.onopen = () => {
+    // console.log('WebSocket connection opened')
+  }
+
+  socket.onmessage = (event) => {
+    const data = JSON.parse(event.data)
+    unreadMessageCount.value = Number.parseInt(data?.content)
+  }
+
+  socket.onerror = () => {
+    // console.error('WebSocket error:', error)
+  }
+
+  socket.onclose = () => {
+    // console.log('WebSocket connection closed')
+  }
+}
+
+// 查询未读消息数量
+const getMessageCount = async () => {
+  const { data } = await getUnreadMessageCount()
+  unreadMessageCount.value = data.total
+  const token = getToken()
+  if (token) {
+    initWebSocket(token)
+  }
+}
 
 const { isFullscreen, toggle } = useFullscreen()
 
@@ -126,6 +173,7 @@ const checkPasswordExpired = () => {
 
 onMounted(() => {
   checkPasswordExpired()
+  getMessageCount()
 })
 </script>
 

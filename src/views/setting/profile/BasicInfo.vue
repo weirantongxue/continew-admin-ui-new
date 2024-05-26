@@ -36,11 +36,11 @@
           </a-descriptions-item>
           <a-descriptions-item :span="4">
             <template #label> <icon-phone /><span style="margin-left: 5px">手机</span></template>
-            {{ userInfo.phone }}
+            {{ userInfo.phone || '暂无' }}
           </a-descriptions-item>
           <a-descriptions-item :span="4">
             <template #label> <icon-email /><span style="margin-left: 5px">邮箱</span></template>
-            {{ userInfo.email }}
+            {{ userInfo.email || '暂无' }}
           </a-descriptions-item>
           <a-descriptions-item :span="4">
             <template #label> <icon-mind-mapping /><span style="margin-left: 5px">部门</span></template>
@@ -56,7 +56,7 @@
     <div class="footer">注册于 {{ userInfo.registrationDate }}</div>
   </a-card>
 
-  <a-modal v-model:visible="visible" title="上传头像" :width="400" :footer="false" @close="reset">
+  <a-modal v-model:visible="visible" title="上传头像" :width="width >= 400 ? 400 : '100%'" :footer="false" @close="reset">
     <a-row>
       <a-col :span="14" style="width: 200px; height: 200px">
         <VueCropper
@@ -95,6 +95,7 @@
 </template>
 
 <script setup lang="ts">
+import { useWindowSize } from '@vueuse/core'
 import { type FileItem, Message } from '@arco-design/web-vue'
 import { VueCropper } from 'vue-cropper'
 import BasicInfoUpdateModal from './BasicInfoUpdateModal.vue'
@@ -103,6 +104,7 @@ import 'vue-cropper/dist/index.css'
 import { useUserStore } from '@/stores'
 import getAvatar from '@/utils/avatar'
 
+const { width } = useWindowSize()
 const userStore = useUserStore()
 const userInfo = computed(() => userStore.userInfo)
 

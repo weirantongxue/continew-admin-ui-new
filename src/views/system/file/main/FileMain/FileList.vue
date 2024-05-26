@@ -27,7 +27,10 @@
                 <div class="file-image">
                   <FileImage :data="record"></FileImage>
                 </div>
-                <span>{{ record.name }}</span>
+                <a-typography-paragraph copyable :copy-text="record.url">
+                  <template #copy-tooltip>复制链接</template>
+                  {{ getFileName(record) }}
+                </a-typography-paragraph>
               </section>
               <template #content>
                 <FileRightMenu :data="record" @click="handleRightMenuClick($event, record)"></FileRightMenu>
@@ -35,15 +38,11 @@
             </a-trigger>
           </template>
         </a-table-column>
-        <a-table-column title="文件大小" data-index="size" :width="150">
+        <a-table-column title="大小" data-index="size" :width="150">
           <template #cell="{ record }">{{ formatFileSize(record.size) }}</template>
         </a-table-column>
-        <a-table-column title="扩展名" data-index="extension" :width="100">
-          <template #cell="{ record }">
-            <a-tag v-if="record.extension" size="small" color="purple">{{ record.extension }}</a-tag>
-          </template>
-        </a-table-column>
-        <a-table-column title="修改时间" data-index="updateTime" :width="200"></a-table-column>
+        <a-table-column title="存储名称" data-index="storageName" :width="200" />
+        <a-table-column title="修改时间" data-index="updateTime" :width="200" />
         <a-table-column title="操作" :width="120" align="center">
           <template #cell="{ record }">
             <a-popover trigger="click" position="bottom" :content-style="{ 'padding': 0, 'margin-top': 0 }">
@@ -53,7 +52,7 @@
                   :file-info="record"
                   :shadow="false"
                   @click="handleRightMenuClick($event, record)"
-                ></FileRightMenu>
+                />
               </template>
             </a-popover>
           </template>
@@ -87,6 +86,11 @@ const emit = defineEmits<{
   (e: 'select', record: FileItem): void
   (e: 'right-menu-click', mode: string, item: FileItem): void
 }>()
+
+// 文件名称带后缀
+const getFileName = (item: FileItem) => {
+  return `${item.name}${item.extension ? `.${item.extension}` : ''}`
+}
 
 const rowSelection: TableRowSelection = reactive({
   type: 'checkbox',

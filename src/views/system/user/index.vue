@@ -7,23 +7,11 @@
         </slot>
       </a-space>
     </a-row>
-    <a-row :gutter="16">
-      <a-col :xs="0" :md="4" :lg="4" :xl="4" :xxl="4">
-        <a-input v-model="deptName" placeholder="请输入部门名称" allow-clear style="margin-bottom: 10px">
-          <template #prefix><icon-search /></template>
-        </a-input>
-        <a-tree
-          ref="treeRef"
-          :data="deptList"
-          :selected-keys="selectedKeys"
-          default-expand-all
-          show-line
-          block-node
-          @select="handleSelectDept"
-        >
-        </a-tree>
+    <a-row align="stretch" :gutter="14" class="h-full">
+      <a-col :xs="0" :sm="8" :md="7" :lg="6" :xl="5" :xxl="4" flex="260px" class="h-full ov-hidden">
+        <DeptTree placeholder="请输入关键词" @node-click="handleSelectDept" />
       </a-col>
-      <a-col :xs="24" :md="20" :lg="20" :xl="20" :xxl="20">
+      <a-col :xs="24" :sm="16" :md="17" :lg="18" :xl="19" :xxl="20" flex="1" class="h-full ov-hidden">
         <GiTable
           row-key="id"
           :data="dataList"
@@ -63,15 +51,14 @@
             </a-tooltip>
           </template>
           <template #username="{ record }">
-            <GiCellAvatar
-              :avatar="getAvatar(record.avatar, record.gender)"
-              :name="record.username"
-              is-link
-              @click="onDetail(record)"
-            />
+            <GiCellAvatar :avatar="getAvatar(record.avatar, record.gender)" :name="record.username" is-link
+              @click="onDetail(record)" />
           </template>
           <template #gender="{ record }">
             <GiCellGender :gender="record.gender" />
+          </template>
+          <template #roleNames="{ record }">
+            <GiCellTags :data="record.roleNames" />
           </template>
           <template #status="{ record }">
             <GiCellStatus :status="record.status" />
@@ -83,13 +70,8 @@
           <template #action="{ record }">
             <a-space>
               <a-link v-permission="['system:user:update']" @click="onUpdate(record)">修改</a-link>
-              <a-link
-                v-permission="['system:user:delete']"
-                status="danger"
-                :title="record.isSystem ? '系统内置数据不能删除' : '删除'"
-                :disabled="record.disabled"
-                @click="onDelete(record)"
-              >
+              <a-link v-permission="['system:user:delete']" status="danger"
+                :title="record.isSystem ? '系统内置数据不能删除' : '删除'" :disabled="record.disabled" @click="onDelete(record)">
                 删除
               </a-link>
               <a-dropdown>
@@ -111,14 +93,13 @@
 </template>
 
 <script setup lang="ts">
-import type { TreeInstance } from '@arco-design/web-vue'
+import DeptTree from './dept/index.vue'
 import UserAddModal from './UserAddModal.vue'
 import UserDetailDrawer from './UserDetailDrawer.vue'
 import UserResetPwdModal from './UserResetPwdModal.vue'
 import { type UserQuery, type UserResp, deleteUser, exportUser, listUser } from '@/apis'
 import type { TableInstanceColumns } from '@/components/GiTable/type'
 import { useDownload, useTable } from '@/hooks'
-import { useDept } from '@/hooks/app'
 import { isMobile } from '@/utils'
 import getAvatar from '@/utils/avatar'
 import has from '@/utils/has'
@@ -127,7 +108,7 @@ import { DisEnableStatusList } from '@/constant/common'
 defineOptions({ name: 'SystemUser' })
 
 const queryForm = reactive<UserQuery>({
-  sort: ['createTime,desc']
+  sort: ['t1.createTime,desc']
 })
 
 const {
@@ -136,7 +117,7 @@ const {
   pagination,
   search,
   handleDelete
-} = useTable((page) => listUser({ ...queryForm, ...page }), { immediate: true })
+} = useTable((page) => listUser({ ...queryForm, ...page }), { immediate: false })
 
 const columns: TableInstanceColumns[] = [
   {
@@ -155,16 +136,17 @@ const columns: TableInstanceColumns[] = [
     fixed: !isMobile() ? 'left' : undefined
   },
   { title: '昵称', dataIndex: 'nickname', width: 120, ellipsis: true, tooltip: true },
-  { title: '状态', slotName: 'status', align: 'center' },
-  { title: '性别', slotName: 'gender', align: 'center' },
-  { title: '所属部门', dataIndex: 'deptName', ellipsis: true, tooltip: true },
+  { title: '状态', slotName: 'status', align: 'center', width: 80 },
+  { title: '性别', slotName: 'gender', align: 'center', width: 100 },
+  { title: '所属部门', dataIndex: 'deptName', ellipsis: true, tooltip: true, width: 180 },
+  { title: '角色', dataIndex: 'roleNames', slotName: 'roleNames', width: 160 },
   { title: '手机号', dataIndex: 'phone', width: 170, ellipsis: true, tooltip: true },
   { title: '邮箱', dataIndex: 'email', width: 170, ellipsis: true, tooltip: true },
   { title: '系统内置', slotName: 'isSystem', width: 100, align: 'center', show: false },
-  { title: '描述', dataIndex: 'description', ellipsis: true, tooltip: true },
-  { title: '创建人', dataIndex: 'createUserString', ellipsis: true, tooltip: true, show: false },
+  { title: '描述', dataIndex: 'description', width: 130, ellipsis: true, tooltip: true },
+  { title: '创建人', dataIndex: 'createUserString', ellipsis: true, tooltip: true, width: 140, show: false },
   { title: '创建时间', dataIndex: 'createTime', width: 180 },
-  { title: '修改人', dataIndex: 'updateUserString', ellipsis: true, tooltip: true, show: false },
+  { title: '修改人', dataIndex: 'updateUserString', ellipsis: true, tooltip: true, width: 140, show: false },
   { title: '修改时间', dataIndex: 'updateTime', width: 180, show: false },
   {
     title: '操作',
@@ -196,25 +178,6 @@ const onExport = () => {
   useDownload(() => exportUser(queryForm))
 }
 
-const treeRef = ref<TreeInstance>()
-const deptName = ref('')
-// 查询部门列表
-const { deptList, getDeptList } = useDept({
-  onSuccess: () => {
-    nextTick(() => {
-      treeRef.value?.expandAll(true)
-      queryForm.deptId = deptList.value[0]?.key as string
-      search()
-    })
-  }
-})
-const selectedKeys = computed(() => {
-  return [queryForm.deptId ? queryForm.deptId : '']
-})
-watch(deptName, (val) => {
-  getDeptList(val)
-})
-
 // 根据选中部门查询
 const handleSelectDept = (keys: Array<any>) => {
   queryForm.deptId = keys.length === 1 ? keys[0] : undefined
@@ -243,10 +206,6 @@ const UserResetPwdModalRef = ref<InstanceType<typeof UserResetPwdModal>>()
 const onResetPwd = (item: UserResp) => {
   UserResetPwdModalRef.value?.onReset(item.id)
 }
-
-onMounted(() => {
-  getDeptList()
-})
 </script>
 
 <style lang="scss" scoped></style>
