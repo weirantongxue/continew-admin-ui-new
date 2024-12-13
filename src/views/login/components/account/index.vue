@@ -95,9 +95,10 @@ onBeforeUnmount(() => {
 // 获取验证码
 const getCaptcha = () => {
   getImageCaptcha().then((res) => {
-    const { uuid, img, expireTime } = res.data
-    form.uuid = uuid
+    const { uuid, img, expireTime, isEnabled } = res.data
+    isCaptchaEnabled.value = isEnabled
     captchaImgBase64.value = img
+    form.uuid = uuid
     form.expired = false
     startTimer(expireTime, Number(res.timestamp))
   })
