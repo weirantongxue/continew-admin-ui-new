@@ -205,7 +205,7 @@ onMounted(() => {
   .search {
     display: flex;
     justify-content: start;
-    margin-bottom: 2px;
+    margin-bottom: 10px;
     .arco-btn {
       margin-left: 8px;
       padding: 0 15px;
@@ -218,7 +218,7 @@ onMounted(() => {
     background-color: var(--color-bg-1);
     position: relative;
     height: 100%;
-    margin-bottom:10px;
+/*    margin-bottom:10px;*/
     .tree {
       position: absolute;
       top: 0;

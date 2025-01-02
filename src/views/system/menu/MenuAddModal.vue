@@ -4,12 +4,13 @@
     :title="title"
     :mask-closable="false"
     :esc-to-close="false"
-    :width="width >= 600 ? 600 : '100%'"
+    :body-style="{ maxHeight: width >= 650 ? '76vh' : '100vh' }"
+    :width="width >= 650 ? 650 : '100%'"
     draggable
     @before-ok="save"
     @close="reset"
   >
-    <a-form ref="formRef" :model="form" :rules="formRules" auto-label-width>
+    <a-form ref="formRef" :model="form" :rules="formRules" auto-label-width :layout="width >= 700 ? 'horizontal' : 'vertical'">
       <a-form-item label="菜单类型" field="type">
         <a-radio-group v-model="form.type" type="button" :disabled="isUpdate" @change="onChangeType">
           <a-radio :value="1">目录</a-radio>
@@ -28,37 +29,56 @@
           :filter-tree-node="filterOptions"
         />
       </a-form-item>
-      <a-form-item v-if="[1, 2].includes(form.type)" label="菜单图标" field="icon">
-        <GiIconSelector v-model="form.icon" />
+      <a-row>
+        <a-col v-bind="colProps">
+          <a-form-item label="菜单标题" field="title">
+            <a-input v-model.trim="form.title" placeholder="请输入菜单标题" :max-length="30" show-word-limit allow-clear />
+          </a-form-item>
+        </a-col>
+        <a-col v-bind="colProps">
+          <a-form-item v-if="[1, 2].includes(form.type)" label="菜单图标" field="icon">
+            <GiIconSelector v-model="form.icon" />
+          </a-form-item>
+          <a-form-item v-else label="权限标识" field="permission">
+            <a-input v-model.trim="form.permission" placeholder="system:user:add" allow-clear />
+          </a-form-item>
+        </a-col>
+      </a-row>
+      <a-row>
+        <a-col v-bind="colProps">
+          <a-form-item v-if="[1, 2].includes(form.type)" label="路由地址" field="path">
+            <a-input v-model.trim="form.path" placeholder="请输入路由地址" allow-clear />
+          </a-form-item>
+        </a-col>
+        <a-col v-bind="colProps">
+          <a-form-item v-if="form.type === 1 || (form.type === 2 && !form.isExternal)" label="重定向" field="redirect">
+            <a-input v-model.trim="form.redirect" placeholder="请输入重定向地址" allow-clear />
+          </a-form-item>
+          <a-form-item v-if="form.type === 2 && form.isExternal" label="组件路径" field="component">
+            <a-input v-model.trim="form.component" placeholder="请输入组件路径" allow-clear />
+          </a-form-item>
+        </a-col>
+      </a-row>
+      <a-form-item v-if="form.type === 2 && !form.isExternal" label="组件路径" field="component">
+        <a-select v-model="form.component" placeholder="请输入或选择组件路径" allow-clear allow-create :options="componentOptions">
+          <template #label="{ data }">
+            {{ data?.value }}
+          </template>
+        </a-select>
       </a-form-item>
-      <a-form-item label="菜单标题" field="title">
-        <a-input v-model.trim="form.title" placeholder="请输入菜单标题" allow-clear />
-      </a-form-item>
-      <a-form-item v-if="[1, 2].includes(form.type)" label="路由地址" field="path">
-        <a-input v-model.trim="form.path" placeholder="请输入路由地址" allow-clear />
-      </a-form-item>
-      <a-form-item v-if="[1, 2].includes(form.type) && !form.isExternal" label="重定向" field="redirect">
-        <a-input v-model.trim="form.redirect" placeholder="请输入重定向地址" allow-clear />
-      </a-form-item>
-      <a-form-item v-if="[1, 2].includes(form.type) && !form.isExternal" label="组件名称" field="name">
-        <a-input v-model.trim="form.name" placeholder="请输入组件名称" allow-clear />
-        <template #extra>
-          <div v-if="componentName">
-            <span>建议组件名称：</span>
-            <a-tag checkable @check="inputComponentName">{{ componentName }}</a-tag>
-          </div>
-        </template>
-      </a-form-item>
-      <a-form-item v-if="form.type === 2" label="组件路径" field="component">
-        <a-input v-if="form.isExternal" v-model.trim="form.component" placeholder="请输入组件路径" allow-clear />
-        <a-input v-else v-model.trim="form.component" placeholder="请输入组件路径" allow-clear>
-          <template #prepend>@/views/</template>
-          <template #append>.vue</template>
-        </a-input>
-      </a-form-item>
-      <a-form-item v-if="form.type === 3" label="权限标识" field="permission">
-        <a-input v-model.trim="form.permission" placeholder="system:user:add" allow-clear />
-      </a-form-item>
+      <a-row>
+        <a-col v-bind="colProps">
+          <a-form-item v-if="form.type === 1 || (form.type === 2 && !form.isExternal)" label="组件名称" field="name">
+            <a-input v-model.trim="form.name" placeholder="请输入组件名称" :max-length="50" show-word-limit allow-clear />
+            <template #extra>
+              <div v-if="componentName">
+                <span>建议组件名称：</span>
+                <a-tag checkable @check="inputComponentName">{{ componentName }}</a-tag>
+              </div>
+            </template>
+          </a-form-item>
+        </a-col>
+      </a-row>
       <a-row v-if="[1, 2].includes(form.type)" :gutter="16">
         <a-col :xs="12" :sm="12" :md="8" :lg="8" :xl="8" :xxl="8">
           <a-form-item label="是否隐藏" field="hidden">
@@ -115,12 +135,13 @@
 </template>
 
 <script setup lang="ts">
-import { type FormInstance, Message, type TreeNodeData } from '@arco-design/web-vue'
+import { type ColProps, type FormInstance, Message, type TreeNodeData } from '@arco-design/web-vue'
 import { useWindowSize } from '@vueuse/core'
 import { mapTree } from 'xe-utils'
 import { type MenuResp, addMenu, getMenu, updateMenu } from '@/apis/system/menu'
 import { useResetReactive } from '@/hooks'
 import { filterTree, transformPathToName } from '@/utils'
+import { useComponentPaths } from '@/hooks/modules/useComponentPaths'
 
 interface Props {
   menus: MenuResp[]
@@ -134,6 +155,8 @@ const emit = defineEmits<{
 }>()
 
 const { width } = useWindowSize()
+
+const colProps: ColProps = { xs: 24, sm: 24, md: 12, lg: 12, xl: 12, xxl: 12 }
 
 const dataId = ref('')
 const visible = ref(false)
@@ -151,6 +174,8 @@ const [form, resetForm] = useResetReactive({
 })
 
 const componentName = computed(() => transformPathToName(form.path))
+
+const { componentOptions } = useComponentPaths()
 
 const rules: FormInstance['rules'] = {
   parentId: [{ required: true, message: '请选择上级菜单' }],

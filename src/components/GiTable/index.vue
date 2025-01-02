@@ -72,6 +72,9 @@
         </a-tooltip>
       </a-space>
     </a-row>
+    <a-row class="gi-table__toolbar-bottom">
+      <slot name="toolbar-bottom"></slot>
+    </a-row>
     <div class="gi-table__body" :class="`gi-table__body-pagination-${attrs['page-position']}`">
       <div class="gi-table__container">
         <a-table
@@ -128,6 +131,7 @@ defineSlots<{
   'top': () => void
   'toolbar-left': () => void
   'toolbar-right': () => void
+  'toolbar-bottom': () => void
   [propsName: string]: (props: { key: string, record: T, column: TableColumnData, rowIndex: number }) => void
 }>()
 
@@ -363,6 +367,10 @@ defineExpose({ tableRef })
 
     :deep(.arco-form-layout-inline .arco-form-item) {
       margin-bottom: 0;
+    }
+
+    &-bottom {
+      margin-bottom: 8px;
     }
   }
 

@@ -124,7 +124,7 @@ const columns: TableInstanceColumns[] = [
     render: ({ rowIndex }) => h('span', {}, rowIndex + 1 + (pagination.current - 1) * pagination.pageSize),
     fixed: !isMobile() ? 'left' : undefined,
   },
-  { title: '名称', dataIndex: 'name', slotName: 'name', fixed: !isMobile() ? 'left' : undefined },
+  { title: '名称', dataIndex: 'name', slotName: 'name', ellipsis: true, tooltip: true, fixed: !isMobile() ? 'left' : undefined },
   { title: 'Access Key', dataIndex: 'accessKey', slotName: 'accessKey', width: 200 },
   { title: 'Secret Key', dataIndex: 'secretKey', slotName: 'secretKey', width: 200 },
   { title: '失效时间', dataIndex: 'expireTime', width: 180 },

@@ -40,9 +40,7 @@
               <template v-if="selectedKeys.length > 0">
                 已选中 {{ selectedKeys.length }} 条记录(可跨页)
               </template>
-              <template v-else>
-                未选中任何记录
-              </template>
+              <template v-else>未选中任何记录</template>
               <template v-if="selectedKeys.length > 0" #action>
                 <a-link @click="onClearSelected">清空</a-link>
               </template>

@@ -1,7 +1,7 @@
 <template>
   <a-modal v-model:visible="visible" width="90%" :footer="false">
     <template #title>
-      {{ `生成 ${previewTableName} 表预览` }}
+      {{ previewTableNames.length === 1 ? `生成 ${previewTableNames[0]} 表预览` : '批量生成预览' }}
       <a-link v-permission="['code:generator:generate']" style="margin-left: 10px" icon @click="onDownload">下载源码</a-link>
     </template>
     <div class="preview-content">
@@ -71,13 +71,13 @@ import { Message, type TreeNodeData } from '@arco-design/web-vue'
 import { useClipboard } from '@vueuse/core'
 import { type GeneratePreviewResp, genPreview } from '@/apis/code/generator'
 
-const emit = defineEmits<{ (e: 'generate', tableNames: string[]): void }>()
+const emit = defineEmits<{ (e: 'generate', previewTableNames: string[]): void }>()
 const { copy, copied } = useClipboard()
 
 const genPreviewList = ref<GeneratePreviewResp[]>([])
 const currentPreview = ref<GeneratePreviewResp>()
 const visible = ref(false)
-const previewTableName = ref<string>('')
+const previewTableNames = ref<string[]>([])
 const treeRef = ref()
 const treeData = ref<TreeNodeData[]>([])
 // 合并目录
@@ -128,7 +128,7 @@ const assembleTree = (genPreview: GeneratePreviewResp) => {
 
 // 下载
 const onDownload = () => {
-  emit('generate', [previewTableName.value])
+  emit('generate', [previewTableNames.value])
 }
 // 校验文件类型
 const checkFileType = (title: string, type: string) => {
@@ -160,10 +160,10 @@ const onSelectPreview = (keys: (string | number)[]) => {
 }
 
 // 打开
-const onOpen = async (tableName: string) => {
+const onOpen = async (tableNames: Array<string>) => {
   treeData.value = []
-  previewTableName.value = tableName
-  const { data } = await genPreview(tableName)
+  previewTableNames.value = tableNames
+  const { data } = await genPreview(tableNames)
   genPreviewList.value = data
   for (const genPreview of genPreviewList.value) {
     assembleTree(genPreview)

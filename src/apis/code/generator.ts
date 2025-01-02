@@ -27,8 +27,8 @@ export function saveGenConfig(tableName: string, req: T.GeneratorConfigResp) {
 }
 
 /** @desc 生成预览 */
-export function genPreview(tableName: string) {
-  return http.get<T.GeneratePreviewResp[]>(`${BASE_URL}/preview/${tableName}`)
+export function genPreview(tableNames: Array<string>) {
+  return http.get<T.GeneratePreviewResp[]>(`${BASE_URL}/preview/${tableNames}`)
 }
 
 /** @desc 生成代码 */

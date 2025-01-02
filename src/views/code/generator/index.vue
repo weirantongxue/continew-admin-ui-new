@@ -1,6 +1,7 @@
 <template>
   <div class="table-page">
     <GiTable
+      v-model:selectedKeys="selectedKeys"
       title="代码生成"
       row-key="tableName"
       :data="dataList"
@@ -10,6 +11,9 @@
       :pagination="pagination"
       :disabled-tools="['size', 'setting']"
       :disabled-column-keys="['tableName']"
+      :row-selection="{ type: 'checkbox', showCheckedAll: true }"
+      @select="select"
+      @select-all="selectAll"
       @refresh="search"
     >
       <template #toolbar-left>
@@ -19,6 +23,23 @@
           <template #default>重置</template>
         </a-button>
       </template>
+      <template #toolbar-right>
+        <a-button type="primary" :disabled="!selectedKeys.length" :title="!selectedKeys.length ? '请选择' : ''" @click="onPreview(selectedKeys)">
+          <template #icon><icon-code-sandbox /></template>
+          <template #default>批量生成</template>
+        </a-button>
+      </template>
+      <template #toolbar-bottom>
+        <a-alert>
+          <template v-if="selectedKeys.length > 0">
+            已选中 {{ selectedKeys.length }} 条记录(可跨页)
+          </template>
+          <template v-else>未选中任何记录</template>
+          <template v-if="selectedKeys.length > 0" #action>
+            <a-link @click="onClearSelected">清空</a-link>
+          </template>
+        </a-alert>
+      </template>
       <template #action="{ record }">
         <a-space>
           <a-link v-permission="['code:generator:config']" title="配置" @click="onConfig(record.tableName, record.comment)">配置</a-link>
@@ -26,7 +47,7 @@
             v-permission="['code:generator:preview']"
             :disabled="!record.createTime"
             :title="record.createTime ? '生成' : '请先进行生成配置'"
-            @click="onPreview(record.tableName)"
+            @click="onPreview([record.tableName])"
           >
             生成
           </a-link>
@@ -57,8 +78,11 @@ const {
   tableData: dataList,
   loading,
   pagination,
+  selectedKeys,
+  select,
+  selectAll,
   search,
-} = useTable((page) => listGenConfig({ ...queryForm, ...page }), { immediate: true })
+} = useTable((page) => listGenConfig({ ...queryForm, ...page }), { immediate: true, formatResult: (data) => data.map((i) => ({ ...i, disabled: !i.createTime })) })
 const columns: TableInstanceColumns[] = [
   {
     title: '序号',
@@ -83,6 +107,11 @@ const reset = () => {
   search()
 }
 
+// 清空所有选中数据
+const onClearSelected = () => {
+  selectedKeys.value = []
+}
+
 const GenConfigDrawerRef = ref<InstanceType<typeof GenConfigDrawer>>()
 // 配置
 const onConfig = (tableName: string, comment: string) => {
@@ -91,8 +120,8 @@ const onConfig = (tableName: string, comment: string) => {
 
 const GenPreviewModalRef = ref<InstanceType<typeof GenPreviewModal>>()
 // 预览
-const onPreview = (tableName: string) => {
-  GenPreviewModalRef.value?.onOpen(tableName)
+const onPreview = (tableNames: Array<string>) => {
+  GenPreviewModalRef.value?.onOpen(tableNames)
 }
 
 // 生成
