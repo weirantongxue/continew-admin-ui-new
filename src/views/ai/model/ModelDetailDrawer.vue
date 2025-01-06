@@ -3,7 +3,7 @@
     <a-descriptions :column="2" size="large" class="general-description">
       <a-descriptions-item label="主键">{{ dataDetail?.id }}</a-descriptions-item>
       <a-descriptions-item label="模型名称">{{ dataDetail?.name }}</a-descriptions-item>
-      <a-descriptions-item label="模型编码">{{ dataDetail?.modelCode }}</a-descriptions-item>
+      <a-descriptions-item label="基座模型">{{ dataDetail?.modelName }}</a-descriptions-item>
       <a-descriptions-item label="模型类型">{{ dataDetail?.modelType }}</a-descriptions-item>
       <a-descriptions-item label="预设prompt">{{ dataDetail?.systemPrompt }}</a-descriptions-item>
       <a-descriptions-item label="模型图标">{{ dataDetail?.icon }}</a-descriptions-item>

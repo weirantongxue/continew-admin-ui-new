@@ -5,7 +5,7 @@ const BASE_URL = '/ai/model'
 export interface ModelResp {
   id: string
   name: string
-  modelCode: string
+  modelName: string
   modelType: string
   systemPrompt: string
   icon: string
@@ -27,7 +27,7 @@ export interface ModelResp {
 export interface ModelDetailResp {
   id: string
   name: string
-  modelCode: string
+  modelName: string
   modelType: string
   systemPrompt: string
   icon: string
@@ -47,7 +47,7 @@ export interface ModelDetailResp {
 }
 export interface ModelQuery {
   name: string | undefined
-  modelCode: string | undefined
+  modelName: string | undefined
   modelType: string | undefined
   status: string | undefined
   createUser: string | undefined

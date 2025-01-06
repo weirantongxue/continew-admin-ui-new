@@ -51,8 +51,8 @@ const columns: Columns = reactive<Columns>([
     rules: [{ required: true }],
   },
   {
-    label: '模型编码',
-    field: 'modelCode',
+    label: '基座模型',
+    field: 'modelName',
     type: 'select',
     options: model,
     rules: [{ required: true }],

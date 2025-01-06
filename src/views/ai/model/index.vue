@@ -15,9 +15,9 @@
       <template #toolbar-left>
         <a-input-search v-model="queryForm.name" placeholder="请输入模型名称" allow-clear @search="search" />
         <a-select
-          v-model="queryForm.modelCode"
+          v-model="queryForm.modelName"
           :options="model"
-          placeholder="模型编码"
+          placeholder="基座模型"
           allow-clear
           style="width: 150px"
           @change="search"
@@ -54,8 +54,8 @@
           <template #default>导出</template>
         </a-button>
       </template>
-      <template #modelCode="{ record }">
-        <GiCellTag :value="record.modelCode" :dict="model" />
+      <template #modelName="{ record }">
+        <GiCellTag :value="record.modelName" :dict="model" />
       </template>
       <template #modelType="{ record }">
         <GiCellTag :value="record.modelType" :dict="model_type" />
@@ -104,7 +104,7 @@ const { model_res_type, model_type, model, status } = useDict('model_res_type', 
 
 const queryForm = reactive<ModelQuery>({
   name: undefined,
-  modelCode: undefined,
+  modelName: undefined,
   modelType: undefined,
   status: undefined,
   createUser: undefined,
@@ -121,7 +121,7 @@ const {
 const columns = ref<TableInstanceColumns[]>([
   // { title: '主键', dataIndex: 'id', slotName: 'id', fixed: !isMobile() ? 'left' : undefined, minWidth: 140, ellipsis: true, tooltip: true },
   { title: '模型名称', dataIndex: 'name', slotName: 'name', minWidth: 140, ellipsis: true, tooltip: true, fixed: !isMobile() ? 'left' : undefined },
-  { title: '模型编码', dataIndex: 'modelCode', slotName: 'modelCode' },
+  { title: '基座模型', dataIndex: 'modelName', slotName: 'modelName' },
   { title: '模型类型', dataIndex: 'modelType', slotName: 'modelType' },
   { title: '预设prompt', dataIndex: 'systemPrompt', slotName: 'systemPrompt', minWidth: 140, ellipsis: true, tooltip: true },
   { title: '模型图标', dataIndex: 'icon', slotName: 'icon' },
@@ -150,7 +150,7 @@ const columns = ref<TableInstanceColumns[]>([
 // 重置
 const reset = () => {
   queryForm.name = undefined
-  queryForm.modelCode = undefined
+  queryForm.modelName = undefined
   queryForm.modelType = undefined
   queryForm.status = undefined
   queryForm.createUser = undefined
